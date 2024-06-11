@@ -1,4 +1,6 @@
 # FusionGamejoltGameAPI
+[Discord](https://discord.gg/aY2WFGPBBB)
+
 A Clickteam Fusion 2.5 Wrapper Extension for Gamejolt's [Game API](https://gamejolt.com/game-api/)
 
 For installation, check [Releases](https://github.com/AITYunivers/FusionGamejoltGameAPI/releases)
