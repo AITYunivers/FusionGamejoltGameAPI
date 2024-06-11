@@ -1,0 +1,125 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34825.169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GamejoltGameAPI.Android", "GamejoltGameAPI.Android.vcxproj", "{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GamejoltGameAPI.Shared", "GamejoltGameAPI.Shared.vcxitems", "{A88B9B57-7EAD-496B-916E-271015E44BBC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GamejoltGameAPI.Windows", "GamejoltGameAPI.Windows.vcxproj", "{4CC76326-C0BC-4E01-805E-EA21A9967A26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Unicode|ARM = Debug Unicode|ARM
+		Debug Unicode|ARM64 = Debug Unicode|ARM64
+		Debug Unicode|x64 = Debug Unicode|x64
+		Debug Unicode|x86 = Debug Unicode|x86
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Edittime Unicode|ARM = Edittime Unicode|ARM
+		Edittime Unicode|ARM64 = Edittime Unicode|ARM64
+		Edittime Unicode|x64 = Edittime Unicode|x64
+		Edittime Unicode|x86 = Edittime Unicode|x86
+		Edittime|ARM = Edittime|ARM
+		Edittime|ARM64 = Edittime|ARM64
+		Edittime|x64 = Edittime|x64
+		Edittime|x86 = Edittime|x86
+		Runtime Unicode|ARM = Runtime Unicode|ARM
+		Runtime Unicode|ARM64 = Runtime Unicode|ARM64
+		Runtime Unicode|x64 = Runtime Unicode|x64
+		Runtime Unicode|x86 = Runtime Unicode|x86
+		Runtime|ARM = Runtime|ARM
+		Runtime|ARM64 = Runtime|ARM64
+		Runtime|x64 = Runtime|x64
+		Runtime|x86 = Runtime|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|ARM.ActiveCfg = Debug|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|ARM.Build.0 = Debug|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|ARM64.ActiveCfg = Debug|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|ARM64.Build.0 = Debug|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|x64.ActiveCfg = Debug|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|x64.Build.0 = Debug|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|x86.ActiveCfg = Debug|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug Unicode|x86.Build.0 = Debug|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|ARM.ActiveCfg = Debug|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|ARM.Build.0 = Debug|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|ARM64.Build.0 = Debug|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|x64.ActiveCfg = Debug|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|x64.Build.0 = Debug|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|x86.ActiveCfg = Debug|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Debug|x86.Build.0 = Debug|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime Unicode|ARM.ActiveCfg = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime Unicode|ARM64.ActiveCfg = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime Unicode|x64.ActiveCfg = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime Unicode|x86.ActiveCfg = Runtime|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime|ARM.ActiveCfg = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime|ARM64.ActiveCfg = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime|x64.ActiveCfg = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Edittime|x86.ActiveCfg = Runtime|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|ARM.ActiveCfg = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|ARM.Build.0 = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|ARM64.ActiveCfg = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|ARM64.Build.0 = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|x64.ActiveCfg = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|x64.Build.0 = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|x86.ActiveCfg = Runtime|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime Unicode|x86.Build.0 = Runtime|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|ARM.ActiveCfg = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|ARM.Build.0 = Runtime|ARM
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|ARM64.ActiveCfg = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|ARM64.Build.0 = Runtime|ARM64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|x64.ActiveCfg = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|x64.Build.0 = Runtime|x64
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|x86.ActiveCfg = Runtime|x86
+		{710E343B-0B45-4EA5-AE98-E8C9AFD850A2}.Runtime|x86.Build.0 = Runtime|x86
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug Unicode|ARM.ActiveCfg = Debug Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug Unicode|ARM64.ActiveCfg = Debug Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug Unicode|x64.ActiveCfg = Debug Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug Unicode|x86.ActiveCfg = Debug Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug Unicode|x86.Build.0 = Debug Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug|ARM.ActiveCfg = Debug|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug|x64.ActiveCfg = Debug|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug|x86.ActiveCfg = Debug|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Debug|x86.Build.0 = Debug|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime Unicode|ARM.ActiveCfg = Edittime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime Unicode|ARM64.ActiveCfg = Edittime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime Unicode|x64.ActiveCfg = Edittime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime Unicode|x86.ActiveCfg = Edittime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime Unicode|x86.Build.0 = Edittime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime|ARM.ActiveCfg = Edittime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime|ARM64.ActiveCfg = Edittime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime|x64.ActiveCfg = Edittime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime|x86.ActiveCfg = Edittime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Edittime|x86.Build.0 = Edittime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime Unicode|ARM.ActiveCfg = Runtime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime Unicode|ARM64.ActiveCfg = Runtime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime Unicode|x64.ActiveCfg = Runtime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime Unicode|x86.ActiveCfg = Runtime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime Unicode|x86.Build.0 = Runtime Unicode|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime|ARM.ActiveCfg = Runtime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime|ARM64.ActiveCfg = Runtime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime|x64.ActiveCfg = Runtime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime|x86.ActiveCfg = Runtime|Win32
+		{4CC76326-C0BC-4E01-805E-EA21A9967A26}.Runtime|x86.Build.0 = Runtime|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D02C22C-1DE6-4B56-9732-2BE37F628C28}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		GamejoltGameAPI.Shared.vcxitems*{4cc76326-c0bc-4e01-805e-ea21a9967a26}*SharedItemsImports = 4
+		GamejoltGameAPI.Shared.vcxitems*{710e343b-0b45-4ea5-ae98-e8c9afd850a2}*SharedItemsImports = 4
+		GamejoltGameAPI.Shared.vcxitems*{a88b9b57-7ead-496b-916e-271015e44bbc}*SharedItemsImports = 9
+		GamejoltGameAPI.Shared.vcxitems*{4cc76326-c0bc-4e01-805e-ea21a9967a26}*SharedItemImports = 4
+		GamejoltGameAPI.Shared.vcxitems*{710e343b-0b45-4ea5-ae98-e8c9afd850a2}*SharedItemImports = 4
+		GamejoltGameAPI.Shared.vcxitems*{a88b9b57-7ead-496b-916e-271015e44bbc}*SharedItemImports = 9
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,1114 @@
+{
+	// 4-character identifer that uniquely identifies your extension.
+	// Can be letters, numbers, or punctuation, but must be 4 ASCII characters.
+	"Identifier": "JOLT",
+	"Dependencies": "",
+	"UK English": {
+		"About": {
+			"Name": "Gamejolt API",
+			"Author": "Yunivers",
+			"Copyright": "Copyright \u00A9 2024 Yunivers",
+			"Comment": "A Extension wrapper for Gamejolt's Game API v1.2'"
+		},
+		"ActionMenu": [
+			[
+				"Users",
+				[ 0, "Auth" ],
+				[ 1, "Auth from gj-credentials" ],
+				[ 38, "Set Game ID" ],
+				[ 39, "Set Private Key" ],
+				[ 2, "Set Guest Name" ],
+				[ 3, "Fetch (Username)" ],
+				[ 4, "Fetch (User ID)" ]
+			],
+			[
+				"Sessions",
+				[ 5, "Open Session" ],
+				[ 6, "Ping Session" ],
+				[ 7, "Ping Session with Status" ],
+				[ 8, "Check Session" ],
+				[ 9, "Close Session" ]
+			],
+			[
+				"Scores",
+				[ 10, "Add User Score" ],
+				[ 11, "Add Guest Score" ],
+				[ 12, "Get Score Ranking" ],
+				[ 13, "Fetch Scores" ],
+				[ 40, "Fetch User Scores" ],
+				[ 14, "Get Tables" ]
+			],
+			[
+				"Trophies",
+				[ 15, "Get Trophy" ],
+				[ 16, "Get All Trophies" ],
+				[ 17, "Get Achieved Trophies" ],
+				[ 18, "Add Achieved Trophy" ],
+				[ 19, "Remove Achieved Trophy" ]
+			],
+			[
+				"Data Storage",
+				[
+					"Global Storage",
+					[ 20, "Get Data" ],
+					[ 21, "Get Keys" ],
+					[ 22, "Delete Key" ],
+					[ 23, "Set Key" ],
+					[ 24, "Update Key" ]
+				],
+				[
+					"User Storage",
+					[ 25, "Get Data" ],
+					[ 26, "Get Keys" ],
+					[ 27, "Delete Key" ],
+					[ 28, "Set Key" ],
+					[ 29, "Update Key" ]
+				]
+				//[
+				//	"File Storage",
+				//	[
+				//		"Global Storage",
+				//		[ 30, "Save Data to File" ],
+				//		[ 31, "Set Key from File" ],
+				//		[ 32, "Update Key from File" ]
+				//	],
+				//	[
+				//		"User Storage",
+				//		[ 33, "Save Data to File" ],
+				//		[ 34, "Set Key from File" ],
+				//		[ 35, "Update Key from File" ]
+				//	]
+				//]
+			],
+			[
+				"Extra",
+				[ 36, "Get Friends List" ],
+				[ 37, "Get Current Time" ]
+			]
+		],
+		"ConditionMenu": [
+			[ 31, "Any Call finished" ],
+			[
+				"Users",
+				[ 0, "Auth finished" ],
+				[ 1, "Fetch finished" ]
+			],
+			[
+				"Sessions",
+				[ 2, "Open finished" ],
+				[ 3, "Ping finished" ],
+				[ 4, "Check finished" ],
+				[ 5, "Close finished" ]
+			],
+			[
+				"Scores",
+				[ 6, "Add Score finished" ],
+				[ 7, "Get Ranking finished" ],
+				[ 8, "Fetch Scores finished" ],
+				[ 9, "Get Tables finished" ]
+			],
+			[
+				"Trophies",
+				[ 10, "Get Trophies finished" ],
+				[ 11, "Add Trophy finished" ],
+				[ 12, "Remove Trophy finished" ]
+			],
+			[
+				"Data Storage",
+				[
+					"Global Storage",
+					[ 13, "Get Data finished" ],
+					[ 14, "Get Keys finished" ],
+					[ 15, "Delete Key finished" ],
+					[ 16, "Set Key finished" ],
+					[ 17, "Update Key finished" ]
+				],
+				[
+					"User Storage",
+					[ 18, "Get Data finished" ],
+					[ 19, "Get Keys finished" ],
+					[ 20, "Delete Key finished" ],
+					[ 21, "Set Key finished" ],
+					[ 22, "Update Key finished" ]
+				]
+				//[
+				//	"File Storage",
+				//	[
+				//		"Global Storage",
+				//		[ 23, "Save Data finished" ],
+				//		[ 24, "Set Key finished" ],
+				//		[ 25, "Update Key finished" ]
+				//	],
+				//	[
+				//		"User Storage",
+				//		[ 26, "Save Data finished" ],
+				//		[ 27, "Set Key finished" ],
+				//		[ 28, "Update Key finished" ]
+				//	]
+				//]
+			],
+			[
+				"Extra",
+				[ 29, "Get Friends List finished" ],
+				[ 30, "Get Current Time finished" ]
+			]
+		],
+		"ExpressionMenu": [
+			[
+				"Response",
+				[ 0, "Get JSON Response" ],
+				[ 1, "Get Response Type" ],
+				[ 2, "Get Response Status" ],
+				[ 3, "Get Response Message" ]
+			],
+			[
+				"Internal Data",
+				[ 56, "Get Game ID" ],
+				[ 57, "Get Private Key" ],
+				"---",
+				[ 4, "Get Username" ],
+				[ 5, "Get User Token" ],
+				[ 6, "Get Guest Name" ]
+			],
+			"---",
+			[
+				"Fetched Users",
+				[ 7, "Fetched User Count" ],
+				"---",
+				[ 8, "Name" ],
+				[ 9, "Username" ],
+				[ 10, "ID" ],
+				[ 11, "Description" ],
+				[ 12, "Avatar URL" ],
+				[ 13, "Website" ],
+				[ 14, "Status" ],
+				[ 15, "Type" ],
+				[ 16, "Last Logged In" ],
+				[ 17, "Last Logged In (Timestamp)" ],
+				[ 18, "Signed Up" ],
+				[ 19, "Signed Up (Timestamp)" ]
+			],
+			[
+				"Scores",
+				[ 20, "Score Ranking" ],
+				[
+					"Table Scores",
+					[ 21, "Fetched Score Count" ],
+					"---",
+					[ 22, "Username" ],
+					[ 23, "UserID" ],
+					[ 24, "Guest Name" ],
+					[ 25, "Score" ],
+					[ 26, "Sorting Score" ],
+					[ 27, "Extra Data" ],
+					[ 28, "Submit Time" ],
+					[ 29, "Submit Time (Timestamp)" ]
+				],
+				[
+					"Fetched Tables",
+					[ 30, "Fetched Table Count" ],
+					"---",
+					[ 31, "Name" ],
+					[ 32, "ID" ],
+					[ 33, "Description" ],
+					[ 34, "Is Primary" ]
+				]
+			],
+			[
+				"Fetched Trophies",
+				[ 35, "Fetched Trophy Count" ],
+				"---",
+				[ 36, "Title" ],
+				[ 37, "ID" ],
+				[ 38, "Description" ],
+				[ 39, "Difficulty" ],
+				[ 40, "Image URL" ],
+				[ 41, "Achieved" ]
+			],
+			[
+				"Data Storage",
+				[ 42, "Retrieved Key Data" ],
+				[
+					"Fetched Keys",
+					[ 43, "Fetched Key Count" ],
+					"---",
+					[ 44, "Key" ]
+				],
+				[ 45, "Updated Key Data" ]
+			],
+			[
+				"Extra",
+				[
+					"Fetched Friends",
+					[ 46, "Fetched Friend Count" ],
+					"---",
+					[ 47, "ID" ]
+				],
+				[
+					"Time",
+					[ 48, "Year" ],
+					[ 49, "Month" ],
+					[ 50, "Day" ],
+					[ 51, "Hour" ],
+					[ 52, "Minute" ],
+					[ 53, "Second" ],
+					[ 54, "Timestamp" ],
+					[ 55, "Timezone" ]
+				]
+			],
+			"---"
+		],
+		"Actions": [
+			{
+				// [0] Auth
+				"Title": "Authorize user (Username: %0, User Token: %1)",
+				"Parameters": [
+					[ "String", "Username" ],
+					[ "String", "User Token" ]
+				]
+			},
+			{
+				// [1] Auth from gj-credentials
+				"Title": "Authorize user via .gj-credentials"
+			},
+			{
+				// [2] Set Guest Name
+				"Title": "Set guest name to %0",
+				"Parameters": [
+					[ "String", "Name" ]
+				]
+			},
+			{
+				// [3] Fetch (Username)
+				"Title": "Fetch user (Username: %0)",
+				"Parameters": [
+					[ "String", "Username" ]
+				]
+			},
+			{
+				// [4] Fetch (User ID)
+				"Title": "Fetch user (User ID: %0)",
+				"Parameters": [
+					[ "Integer", "User ID" ]
+				]
+			},
+			{
+				// [5] Open Session
+				"Title": "Open session"
+			},
+			{
+				// [6] Ping Session
+				"Title": "Ping session"
+			},
+			{
+				// [7] Ping Session with Status
+				"Title": "Ping session with status %0",
+				"Parameters": [
+					[ "String", "Session (active, idle)" ]
+				]
+			},
+			{
+				// [8] Check Session
+				"Title": "Check session"
+			},
+			{
+				// [9] Close Session
+				"Title": "Close session"
+			},
+			{
+				// [10] Add User Score
+				"Title": "Add user score %0 (Sort: %1) to table %2 (Extra Data: %3)",
+				"Parameters": [
+					[ "String", "Score as displayed on the leaderboard" ],
+					[ "Integer", "Real score, all sorting will be based on this number" ],
+					[ "Integer", "Table ID, -1 will submit to the primary high score table" ],
+					[ "String", "Extra Data" ]
+				]
+			},
+			{
+				// [11] Add Guest Score
+				"Title": "Add guest score %0 (Sort: %1) to table %2 (Extra Data: %3)",
+				"Parameters": [
+					[ "String", "Score as displayed on the leaderboard" ],
+					[ "Integer", "Real score, all sorting will be based on this number" ],
+					[ "Integer", "Table ID, -1 will submit to the primary high score table" ],
+					[ "String", "Extra Data" ]
+				]
+			},
+			{
+				// [12] Get Score Ranking
+				"Title": "Get ranking of score %0 on table %1",
+				"Parameters": [
+					[ "Integer", "Score" ],
+					[ "Integer", "Table ID, -1 will submit to the primary high score table" ]
+				]
+			},
+			{
+				// [13] Fetch Scores
+				"Title": "Fetch scores from table %0 (Limit: %1, Better Than: %2, Worse Than %3)",
+				"Parameters": [
+					[ "Integer", "Table ID, -1 will submit to the primary high score table" ],
+					[ "Integer", "Limit of how many scores can be retrieved (-1 to ignore)" ],
+					[ "Integer", "Only get scores better than this score (-1 to ignore)" ],
+					[ "Integer", "Only get scores worse than this score (-1 to ignore)" ]
+				]
+			},
+			{
+				// [14] Get Tables
+				"Title": "Get Tables"
+			},
+			{
+				// [15] Get Trophy
+				"Title": "Get Trophy from ID %0",
+				"Parameters": [
+					[ "Integer", "Trophy ID" ]
+				]
+			},
+			{
+				// [16] Get All Trophies
+				"Title": "Get All Trophies"
+			},
+			{
+				// [17] Get Achieved Trophies
+				"Title": "Get Achieved Trophies"
+			},
+			{
+				// [18] Add Achieved Trophy
+				"Title": "Achieve Trophy ID %0",
+				"Parameters": [
+					[ "Integer", "Trophy ID" ]
+				]
+			},
+			{
+				// [19] Remove Achieved Trophy
+				"Title": "Unachieve Trophy ID %0",
+				"Parameters": [
+					[ "Integer", "Trophy ID" ]
+				]
+			},
+			{
+				// [20] Global Storage -> Get Data
+				"Title": "Get Data from Global Storage with key %0",
+				"Parameters": [
+					[ "String", "Data Key" ]
+				]
+			},
+			{
+				// [21] Global Storage -> Get Keys
+				"Title": "Get Keys from Global Storage (Pattern: %0)",
+				"Parameters": [
+					[ "String", "Search Pattern (Leave blank for all)" ]
+				]
+			},
+			{
+				// [22] Global Storage -> Delete Key
+				"Title": "Delete Key %0 in Global Storage",
+				"Parameters": [
+					[ "String", "Data Key" ]
+				]
+			},
+			{
+				// [23] Global Storage -> Set Key
+				"Title": "Set Key %0 in Global Storage to %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "Data" ]
+				]
+			},
+			{
+				// [24] Global Storage -> Update Key
+				"Title": "Update Key %0 in Global Storage with %1 (Operation: %2)",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "Data" ],
+					[ "String", "Operation (add, subtract, multiply, divide, append, prepend)" ]
+				]
+			},
+			{
+				// [25] User Storage -> Get Data
+				"Title": "Get Data from User Storage with key %0",
+				"Parameters": [
+					[ "String", "Data Key" ]
+				]
+			},
+			{
+				// [26] User Storage -> Get Keys
+				"Title": "Get Keys from User Storage (Pattern: %0)",
+				"Parameters": [
+					[ "String", "Search Pattern (Leave blank for all)" ]
+				]
+			},
+			{
+				// [27] User Storage -> Delete Key
+				"Title": "Delete Key %0 in User Storage",
+				"Parameters": [
+					[ "String", "Data Key" ]
+				]
+			},
+			{
+				// [28] User Storage -> Set Key
+				"Title": "Set Key %0 in User Storage to %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "Data" ]
+				]
+			},
+			{
+				// [29] User Storage -> Update Key
+				"Title": "Update Key %0 in User Storage with %1 (Operation: %2)",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "Data" ],
+					[ "String", "Operation (add, subtract, multiply, divide, append, prepend)" ]
+				]
+			},
+			{
+				// [30] File Storage -> Global Storage -> Save Data to File
+				"Title": "Save Data from Global Storage with key %0 to %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ]
+				]
+			},
+			{
+				// [31] File Storage -> Global Storage -> Set Key from File
+				"Title": "Set Key %0 in Global Storage to file %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ]
+				]
+			},
+			{
+				// [32] File Storage -> Global Storage -> Update Key from File
+				"Title": "Update Key %0 in Global Storage with file %1 (Operation %2)",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ],
+					[ "String", "Operation (append, prepend)" ]
+				]
+			},
+			{
+				// [33] File Storage -> User Storage -> Save Date to File
+				"Title": "Save Data from User Storage with key %0 to %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ]
+				]
+			},
+			{
+				// [34] File Storage -> User Storage -> Set Key from File
+				"Title": "Set Key %0 in User Storage to file %1",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ]
+				]
+			},
+			{
+				// [35] File Storage -> User Storage -> Update Key from File
+				"Title": "Update Key %0 in User Storage with file %1 (Operation %2)",
+				"Parameters": [
+					[ "String", "Data Key" ],
+					[ "String", "File Path" ],
+					[ "String", "Operation (append, prepend)" ]
+				]
+			},
+			{
+				// [36] Get Friends List
+				"Title": "Get Friends List"
+			},
+			{
+				// [37] Get Current Time
+				"Title": "Get Current Time"
+			},
+			{
+				// [38] Auth -> Set Game ID
+				"Title": "Set Game ID to %0",
+				"Parameters": [
+					[ "String", "Game ID" ]
+				]
+			},
+			{
+				// [39] Auth -> Set Private Key
+				"Title": "Set Private Key to %0",
+				"Parameters": [
+					[ "String", "Private Key" ]
+				]
+			},
+			{
+				// [40] Fetch User Scores
+				"Title": "Fetch user scores from table %0 (Limit: %1, Better Than: %2, Worse Than %3)",
+				"Parameters": [
+					[ "Integer", "Table ID, -1 will submit to the primary high score table" ],
+					[ "Integer", "Limit of how many scores can be retrieved (-1 to ignore)" ],
+					[ "Integer", "Only get scores better than this score (-1 to ignore)" ],
+					[ "Integer", "Only get scores worse than this score (-1 to ignore)" ]
+				]
+			}
+		],
+		"Conditions": [
+			{
+				// [0] Auth finished
+				"Title": "%o : Auth finished",
+				"Triggered": true
+			},
+			{
+				// [1] Fetch finished
+				"Title": "%o : Fetch finished",
+				"Triggered": true
+			},
+			{
+				// [2] Open finished
+				"Title": "%o : Session Opened",
+				"Triggered": true
+			},
+			{
+				// [3] Ping finished
+				"Title": "%o : Session Pinged",
+				"Triggered": true
+			},
+			{
+				// [4] Check finished
+				"Title": "%o : Session Checked",
+				"Triggered": true
+			},
+			{
+				// [5] Close finished
+				"Title": "%o : Session Closed",
+				"Triggered": true
+			},
+			{
+				// [6] Add Score finished
+				"Title": "%o : Score Added",
+				"Triggered": true
+			},
+			{
+				// [7] Get Ranking finished
+				"Title": "%o : Ranking of score retrieved",
+				"Triggered": true
+			},
+			{
+				// [8] Fetch Scores finished
+				"Title": "%o : Table Scores retrieved",
+				"Triggered": true
+			},
+			{
+				// [9] Get Tables finished
+				"Title": "%o : Tables retrieved",
+				"Triggered": true
+			},
+			{
+				// [10] Get Trophies finished
+				"Title": "%o : Trophies retrieved",
+				"Triggered": true
+			},
+			{
+				// [11] Add Trophy finished
+				"Title": "%o : Trophy achieved",
+				"Triggered": true
+			},
+			{
+				// [12] Remove Trophy finished
+				"Title": "%o : Trophy unachieved",
+				"Triggered": true
+			},
+			{
+				// [13] Global Storage -> Get Data finished
+				"Title": "%o : Global Storage Data retrieved",
+				"Triggered": true
+			},
+			{
+				// [14] Global Storage -> Get Keys finished
+				"Title": "%o : Global Storage Keys retrieved",
+				"Triggered": true
+			},
+			{
+				// [15] Global Storage -> Delete Key finished
+				"Title": "%o : Global Storage Key deleted",
+				"Triggered": true
+			},
+			{
+				// [16] Global Storage -> Set Key finished
+				"Title": "%o : Global Storage Key set",
+				"Triggered": true
+			},
+			{
+				// [17] Global Storage -> Update Key finished
+				"Title": "%o : Global Storage Key updated",
+				"Triggered": true
+			},
+			{
+				// [18] User Storage -> Get Data finished
+				"Title": "%o : User Storage Data retrieved",
+				"Triggered": true
+			},
+			{
+				// [19] User Storage -> Get Keys finished
+				"Title": "%o : User Storage Keys retrieved",
+				"Triggered": true
+			},
+			{
+				// [20] User Storage -> Delete Key finished
+				"Title": "%o : User Storage Key deleted",
+				"Triggered": true
+			},
+			{
+				// [21] User Storage -> Set Key finished
+				"Title": "%o : User Storage Key set",
+				"Triggered": true
+			},
+			{
+				// [22] User Storage -> Update Key finished
+				"Title": "%o : User Storage Key updated",
+				"Triggered": true
+			},
+			{
+				// [23] File Storage -> Global Storage -> Save Data finished
+				"Title": "%o : Global Storage Data saved to file",
+				"Triggered": true
+			},
+			{
+				// [24] File Storage -> Global Storage -> Set Key finished
+				"Title": "%o : Global Storage Data key set to file",
+				"Triggered": true
+			},
+			{
+				// [25] File Storage -> Global Storage -> Updated Key finished
+				"Title": "%o : Global Storage Data key updated with file",
+				"Triggered": true
+			},
+			{
+				// [26] File Storage -> User Storage -> Save Data finished
+				"Title": "%o : User Storage Data saved to file",
+				"Triggered": true
+			},
+			{
+				// [27] File Storage -> User Storage -> Set Key finished
+				"Title": "%o : User Storage Data key set to file",
+				"Triggered": true
+			},
+			{
+				// [28] File Storage -> User Storage -> Updated Key finished
+				"Title": "%o : User Storage Data key updated with file",
+				"Triggered": true
+			},
+			{
+				// [29] Get Friends List finished
+				"Title": "%o : Friends List retrieved",
+				"Triggered": true
+			},
+			{
+				// [30] Get Current Time finished
+				"Title": "%o : Current Time retrieved",
+				"Triggered": true
+			},
+			{
+				// [31] Any Call finished
+				"Title": "%o : On Any Call finished",
+				"Triggered": true
+			}
+		],
+		"Expressions": [
+			{
+				// [0] Response -> Get JSON Response
+				"Title": "GetJResp$(",
+				"Returns": "String"
+			},
+			{
+				// [1] Response -> Get Response Type
+				"Title": "RespType$(",
+				"Returns": "String"
+			},
+			{
+				// [2] Response -> Get Response Status
+				"Title": "RespStatus$(",
+				"Returns": "String"
+			},
+			{
+				// [3] Response -> Get Response Message
+				"Title": "RespMsg$(",
+				"Returns": "String"
+			},
+			{
+				// [4] Internal Data -> Get Username
+				"Title": "GetUser$(",
+				"Returns": "String"
+			},
+			{
+				// [5] Internal Data -> Get User Token
+				"Title": "GetToken$(",
+				"Returns": "String"
+			},
+			{
+				// [6] Internal Data -> Get Guest Name
+				"Title": "GetGuestName$(",
+				"Returns": "String"
+			},
+			{
+				// [7] Users -> Fetch -> Fetched User Count
+				"Title": "UFCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [8] Users -> Fetch -> Name
+				"Title": "UFName$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [9] Users -> Fetch -> Username
+				"Title": "UFUsername$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [10] Users -> Fetch -> ID
+				"Title": "UFUserID(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [11] Users -> Fetch -> Description
+				"Title": "UFDesc$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [12] Users -> Fetch -> Avatar URL
+				"Title": "UFAvatar$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ],
+					[ "Integer", "Resolution" ]
+				]
+			},
+			{
+				// [13] Users -> Fetch -> Website
+				"Title": "UFWebsite$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [14] Users -> Fetch -> Status
+				"Title": "UFStatus$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [15] Users -> Fetch -> Type
+				"Title": "UFType$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [16] Users -> Fetch -> Last Logged In
+				"Title": "UFLoginTime$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [17] Users -> Fetch -> Last Logged In (Timestamp)
+				"Title": "UFLoginTimestamp(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [18] Users -> Fetch -> Last Signed Up
+				"Title": "UFSignupTime$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [19] Users -> Fetch -> Signed Up (Timestamp)
+				"Title": "UFSignupTimestamp(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "User Index" ]
+				]
+			},
+			{
+				// [20] Scores -> Score Ranking
+				"Title": "SRanking(",
+				"Returns": "Integer"
+			},
+			{
+				// [21] Scores -> Table Scores -> Fetched Score Count
+				"Title": "TSCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [22] Scores -> Table Scores -> Username
+				"Title": "TSUsername$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [23] Scores -> Table Scores -> UserID
+				"Title": "TSUserID(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [24] Scores -> Table Scores -> Guest Name
+				"Title": "TSGuest$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [25] Scores -> Table Scores -> Score
+				"Title": "TSScore$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [26] Scores -> Table Scores -> Sorting Score
+				"Title": "TSSortScore(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [27] Scores -> Table Scores -> Extra Data
+				"Title": "TSData$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [28] Scores -> Table Scores -> Submit Time
+				"Title": "TSSubmitTime$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [29] Scores -> Table Scores -> Submit Time (Timestamp)
+				"Title": "TSSubmitTimestamp(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Score Index" ]
+				]
+			},
+			{
+				// [30] Scores -> Tables -> Fetched Table Count
+				"Title": "TFCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [31] Scores -> Tables -> Name
+				"Title": "TFName$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Table Index" ]
+				]
+			},
+			{
+				// [32] Scores -> Tables -> ID
+				"Title": "TFId(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Table Index" ]
+				]
+			},
+			{
+				// [33] Scores -> Tables -> Description
+				"Title": "TFDesc$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Table Index" ]
+				]
+			},
+			{
+				// [34] Scores -> Tables -> Is Primary
+				"Title": "TFPrimary(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Table Index" ]
+				]
+			},
+			{
+				// [35] Trophies -> Fetched Trophy Count
+				"Title": "TPCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [36] Trophies -> Title
+				"Title": "TPTitle$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [37] Trophies -> ID
+				"Title": "TPId(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [38] Trophies -> Description
+				"Title": "TPDesc$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [39] Trophies -> Difficulty
+				"Title": "TPDiff$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [40] Trophies -> Image URL
+				"Title": "TPImg$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [41] Trophies -> Achieved
+				"Title": "TPAchieved$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Trophy Index" ]
+				]
+			},
+			{
+				// [42] Data Storage -> Retrieved Key Data
+				"Title": "KRData$(",
+				"Returns": "String"
+			},
+			{
+				// [43] Data Storage -> Fetched Keys -> Fetched Key Count
+				"Title": "FKCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [44] Data Storage -> Fetched Keys -> Key
+				"Title": "FKKey$(",
+				"Returns": "String",
+				"Parameters": [
+					[ "Integer", "Key Index" ]
+				]
+			},
+			{
+				// [45] Data Storage -> Updated Key Data
+				"Title": "KUData$(",
+				"Returns": "String"
+			},
+			{
+				// [46] Extra -> Fetched Friends -> Fetched Friend Count
+				"Title": "FFCount(",
+				"Returns": "Integer"
+			},
+			{
+				// [47] Extra -> Fetched Friends -> ID
+				"Title": "FFId(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Friend Index" ]
+				]
+			},
+			{
+				// [48] Extra -> Time -> Year
+				"Title": "ETYear(",
+				"Returns": "Integer"
+			},
+			{
+				// [49] Extra -> Time -> Month
+				"Title": "ETMonth(",
+				"Returns": "Integer"
+			},
+			{
+				// [50] Extra -> Time -> Day
+				"Title": "ETDay(",
+				"Returns": "Integer"
+			},
+			{
+				// [51] Extra -> Time -> Hour
+				"Title": "ETHour(",
+				"Returns": "Integer"
+			},
+			{
+				// [52] Extra -> Time -> Minute
+				"Title": "ETMinute(",
+				"Returns": "Integer"
+			},
+			{
+				// [53] Extra -> Time -> Second
+				"Title": "ETSecond(",
+				"Returns": "Integer"
+			},
+			{
+				// [54] Extra -> Time -> Timestamp
+				"Title": "ETTimestamp(",
+				"Returns": "Integer"
+			},
+			{
+				// [55] Extra -> Time -> Timezone
+				"Title": "ETTimezone$(",
+				"Returns": "String"
+			},
+			{
+				// [56] Internal Data -> Get Game ID
+				"Title": "GameID$(",
+				"Returns": "String"
+			},
+			{
+				// [57] Internal Data -> Get Private Key
+				"Title": "PrivateKey$(",
+				"Returns": "String"
+			}
+		],
+		"Properties": [
+			{
+				"Title": "Game ID",
+				"Info": "Found in Game API -> API Settings",
+				"Type": "Editbox String",
+				"DefaultState": ""
+			},
+			{
+				"Title": "Private Key",
+				"Info": "Found in Game API -> API Settings",
+				"Type": "Editbox String",
+				"DefaultState": ""
+			}
+		]
+	}
+}
