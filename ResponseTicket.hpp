@@ -4,6 +4,7 @@
 
 struct ResponseTicket
 {
+	std::string URL;
 	ResponseType Type;
 	httplib::Result Response;
 	int Trigger = 0;

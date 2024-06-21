@@ -8,16 +8,16 @@ void Extension::Act_Auth(const TCHAR* userName, const TCHAR* userToken)
 
 void Extension::Auth(const TCHAR* userName, const TCHAR* userToken)
 {
-	UserName = URLEncode(userName);
-	UserToken = URLEncode(userToken);
+	GameAuthData->UserName = URLEncode(userName);
+	GameAuthData->UserToken = URLEncode(userToken);
 	SetTrigger(
 		HttpGet(
 			_T("/api/game/v1_2/users/auth/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::Auth),
 		Cnd_AuthFinished);
 }
@@ -35,20 +35,20 @@ void Extension::AuthCreds()
 	{
 		std::tstring version;
 		std::getline(file, version);
-		std::getline(file, UserName);
-		std::getline(file, UserToken);
+		std::getline(file, GameAuthData->UserName);
+		std::getline(file, GameAuthData->UserToken);
 
-		UserName = URLEncode(UserName);
-		UserToken = URLEncode(UserToken);
+		GameAuthData->UserName = URLEncode(GameAuthData->UserName);
+		GameAuthData->UserToken = URLEncode(GameAuthData->UserToken);
 	}
 	SetTrigger(
 		HttpGet(
 			_T("/api/game/v1_2/users/auth/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::Auth),
 		Cnd_AuthFinished);
 }
@@ -65,7 +65,7 @@ void Extension::Act_SetPrivateKey(const TCHAR* privateKey)
 
 void Extension::Act_SetGuestName(const TCHAR* name)
 {
-	GuestName = URLEncode(name);
+	GameAuthData->GuestName = URLEncode(name);
 }
 
 void Extension::Act_FetchUsername(const TCHAR* userName)
@@ -117,9 +117,9 @@ void Extension::OpenSession()
 			_T("/api/game/v1_2/sessions/open/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::OpenSession),
 		Cnd_OpenFinished);
 }
@@ -137,9 +137,9 @@ void Extension::PingSession()
 			_T("/api/game/v1_2/sessions/ping/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::PingSession),
 		Cnd_PingFinished);
 }
@@ -157,9 +157,9 @@ void Extension::PingStatusSession(const TCHAR* status)
 			_T("/api/game/v1_2/sessions/ping/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&status=") +
 			URLEncode(status),
 			ResponseType::PingSession),
@@ -179,9 +179,9 @@ void Extension::CheckSession()
 			_T("/api/game/v1_2/sessions/check/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::CheckSession),
 		Cnd_CheckFinished);
 }
@@ -199,9 +199,9 @@ void Extension::CloseSession()
 			_T("/api/game/v1_2/sessions/close/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::CloseSession),
 		Cnd_CloseFinished);
 }
@@ -214,7 +214,7 @@ void Extension::Act_AddUserScore(const TCHAR* displayScore, int sortScore, int t
 
 void Extension::AddUserScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + UserName + _T("&user_token=") + UserToken + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
 	std::tstring extraDataStr = URLEncode(extraData);
@@ -235,7 +235,7 @@ void Extension::Act_AddGuestScore(const TCHAR* displayScore, int sortScore, int 
 
 void Extension::AddGuestScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GuestName + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GameAuthData->GuestName + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
 	std::tstring extraDataStr = URLEncode(extraData);
@@ -299,10 +299,10 @@ void Extension::Act_FetchUserScores(int table, int limit, int betterThan, int wo
 void Extension::FetchUserScores(int table, int limit, int betterThan, int worseThan)
 {
 	std::tstring url = _T("/api/game/v1_2/scores/?game_id=") + GameID;
-	if (UserName.length() > 0 && UserToken.length() > 0)
-		url += _T("&username=") + UserName + _T("&user_token=") + UserToken;
-	else if (GuestName.length() > 0)
-		url += _T("&guest=") + GuestName;
+	if (GameAuthData->UserName.length() > 0 && GameAuthData->UserToken.length() > 0)
+		url += _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken;
+	else if (GameAuthData->GuestName.length() > 0)
+		url += _T("&guest=") + GameAuthData->GuestName;
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
 	if (limit != -1)
@@ -347,9 +347,9 @@ void Extension::GetTrophy(int trophy)
 			_T("/api/game/v1_2/trophies/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&trophy_id=") +
 			std::to_tstring(trophy),
 			ResponseType::FetchTrophies),
@@ -369,9 +369,9 @@ void Extension::GetTrophies()
 			_T("/api/game/v1_2/trophies/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::FetchTrophies),
 		Cnd_TrophiesRetrieved);
 }
@@ -389,9 +389,9 @@ void Extension::GetUnlockedTrophies()
 			_T("/api/game/v1_2/trophies/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&achieved=true"),
 			ResponseType::FetchTrophies),
 		Cnd_TrophiesRetrieved);
@@ -410,9 +410,9 @@ void Extension::UnlockTrophy(int trophy)
 			_T("/api/game/v1_2/trophies/add-achieved/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&trophy_id=") +
 			std::to_tstring(trophy),
 			ResponseType::AchieveTrophy),
@@ -432,9 +432,9 @@ void Extension::LockTrophy(int trophy)
 			_T("/api/game/v1_2/trophies/remove-achieved/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&trophy_id=") +
 			std::to_tstring(trophy),
 			ResponseType::RevokeTrophy),
@@ -551,9 +551,9 @@ void Extension::UserStorageGetData(const TCHAR* key)
 			_T("/api/game/v1_2/data-store/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&key=") +
 			URLEncode(key),
 			ResponseType::FetchData),
@@ -568,7 +568,7 @@ void Extension::Act_UserStorageGetKeys(const TCHAR* pattern)
 
 void Extension::UserStorageGetKeys(const TCHAR* pattern)
 {
-	std::tstring url = _T("/api/game/v1_2/data-store/get-keys/?game_id=") + GameID + _T("&username=") + UserName + _T("&user_token=") + UserToken;
+	std::tstring url = _T("/api/game/v1_2/data-store/get-keys/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken;
 	std::tstring patternStr = URLEncode(pattern);
 	if (patternStr.length() > 0)
 		url += _T("&pattern=") + patternStr;
@@ -592,9 +592,9 @@ void Extension::UserStorageDeleteKey(const TCHAR* key)
 			_T("/api/game/v1_2/data-store/remove/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&key=") +
 			URLEncode(key),
 			ResponseType::RemoveData),
@@ -614,9 +614,9 @@ void Extension::UserStorageSetKey(const TCHAR* key, const TCHAR* data)
 			_T("/api/game/v1_2/data-store/set/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&key=") +
 			URLEncode(key) +
 			_T("&data=") +
@@ -638,9 +638,9 @@ void Extension::UserStorageUpdateKey(const TCHAR* key, const TCHAR* data, const 
 			_T("/api/game/v1_2/data-store/update/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken +
+			GameAuthData->UserToken +
 			_T("&key=") +
 			URLEncode(key) +
 			_T("&value=") +
@@ -769,7 +769,7 @@ void Extension::UserFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&username=") + UserName + _T("&user_token=") + UserToken + _T("&key=") = URLEncode(key) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") = URLEncode(key) + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::SetData;
 	//Cnd_FUSSetKey);
@@ -799,7 +799,7 @@ void Extension::UserFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&username=") + UserName + _T("&user_token=") + UserToken + _T("&key=") = URLEncode(key) + _T("&operation=") + URLEncode(operation) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") = URLEncode(key) + _T("&operation=") + URLEncode(operation) + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::UpdateData;
 	//Cnd_FUSUpdateKey);
@@ -819,9 +819,9 @@ void Extension::GetFriendsList()
 			_T("/api/game/v1_2/friends/?game_id=") +
 			GameID +
 			_T("&username=") +
-			UserName +
+			GameAuthData->UserName +
 			_T("&user_token=") +
-			UserToken,
+			GameAuthData->UserToken,
 			ResponseType::Friends),
 		Cnd_GetFriendsList);
 }

@@ -69,6 +69,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ResponseTicket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameAuth.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Runtime.cpp">

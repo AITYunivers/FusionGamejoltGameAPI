@@ -118,6 +118,7 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
 
 	LinkExpression(56, Exp_GetGameID);
 	LinkExpression(57, Exp_GetPrivateKey);
+	LinkExpression(58, Exp_GetRequestURL);
 	LinkExpression(4, Exp_GetUserName);
 	LinkExpression(5, Exp_GetUserToken);
 	LinkExpression(6, Exp_GetGuestName);
@@ -179,6 +180,15 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
 
 	GameID = edPtr->Props.GetPropertyStr(0);
 	PrivateKey = edPtr->Props.GetPropertyStr(1);
+	GameAuthData = static_cast<GameAuth*>(Runtime.ReadGlobal(_T("AuthInfo")));
+	if (GameAuthData == NULL)
+	{
+		GameAuthData = new GameAuth();
+		GameAuthData->UserName = _T("");
+		GameAuthData->UserToken = _T("");
+		GameAuthData->GuestName = _T("");
+		Runtime.WriteGlobal(_T("AuthInfo"), GameAuthData);
+	}
 
 	EncodingChars = { ':', '/', '?', '#', '[', ']', '@', '!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=', '%' };
 }
@@ -201,9 +211,10 @@ std::tstring Extension::SerializeUrl(std::tstring url)
 std::unique_ptr<ResponseTicket> Extension::HttpGet(std::tstring url, ResponseType type)
 {
 	std::unique_ptr<ResponseTicket> ticket = std::make_unique<ResponseTicket>();
+	ticket->URL = DarkEdif::TStringToANSI(SerializeUrl(url));
 	ticket->Type = type;
 	httplib::Client cli(DarkEdif::TStringToANSI(JoltBase));
-	ticket->Response = cli.Get(DarkEdif::TStringToANSI(SerializeUrl(url)));
+	ticket->Response = cli.Get(ticket->URL);
 	return ticket;
 }
 

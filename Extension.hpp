@@ -20,6 +20,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 #include <algorithm>
+#include "GameAuth.h"
 using json = nlohmann::json;
 
 class Extension
@@ -37,7 +38,7 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 254;
-	static const int Version = 1;
+	static const int Version = 2;
 
 	// If you change OEFLAGS, make sure you modify RUNDATA so the data is available, or you'll get crashes!
 	// For example, OEFLAGS::VALUES makes use of the AltVals rv struct.
@@ -59,9 +60,7 @@ public:
 	std::tstring JoltBase = _T("http://api.gamejolt.com");
 	std::tstring GameID = _T("");
 	std::tstring PrivateKey = _T("");
-	std::tstring UserName = _T("");
-	std::tstring UserToken = _T("");
-	std::tstring GuestName = _T("");
+	GameAuth* GameAuthData;
 #pragma endregion
 
 #pragma region HTTP
@@ -238,6 +237,7 @@ public:
 
 	const TCHAR* Exp_GetGameID();
 	const TCHAR* Exp_GetPrivateKey();
+	const TCHAR* Exp_GetRequestURL();
 	const TCHAR* Exp_GetUserName();
 	const TCHAR* Exp_GetUserToken();
 	const TCHAR* Exp_GetGuestName();

@@ -24,6 +24,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Inc\Shared\ObjectSelection.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Common.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Extension.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameAuth.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)httplib.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)md5.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)json.hpp" />

@@ -93,20 +93,25 @@ const TCHAR * Extension::Exp_GetPrivateKey()
 	return Runtime.CopyString(PrivateKey.c_str());
 }
 
+const TCHAR * Extension::Exp_GetRequestURL()
+{
+	return Runtime.CopyString((JoltBase + DarkEdif::UTF8ToTString(LatestResponse->URL)).c_str());
+}
+
 const TCHAR * Extension::Exp_GetUserName()
 {
-	return Runtime.CopyString(UserName.c_str());
+	return Runtime.CopyString(GameAuthData->UserName.c_str());
 }
 
 const TCHAR * Extension::Exp_GetUserToken()
 {
-	return Runtime.CopyString(UserToken.c_str());
+	return Runtime.CopyString(GameAuthData->UserToken.c_str());
 }
 
 
 const TCHAR * Extension::Exp_GetGuestName()
 {
-	return Runtime.CopyString(GuestName.c_str());
+	return Runtime.CopyString(GameAuthData->GuestName.c_str());
 }
 #pragma endregion
 

@@ -156,27 +156,28 @@
 		"ExpressionMenu": [
 			[
 				"Response",
-				[ 0, "Get JSON Response" ],
-				[ 1, "Get Response Type" ],
-				[ 2, "Get Response Status" ],
-				[ 3, "Get Response Message" ]
+				[ 0,  "Get JSON Response" ],
+				[ 1,  "Get Response Type" ],
+				[ 2,  "Get Response Status" ],
+				[ 3,  "Get Response Message" ]
 			],
 			[
 				"Internal Data",
 				[ 56, "Get Game ID" ],
 				[ 57, "Get Private Key" ],
+				[ 58, "Get Request URL" ],
 				"---",
-				[ 4, "Get Username" ],
-				[ 5, "Get User Token" ],
-				[ 6, "Get Guest Name" ]
+				[ 4,  "Get Username" ],
+				[ 5,  "Get User Token" ],
+				[ 6,  "Get Guest Name" ]
 			],
 			"---",
 			[
 				"Fetched Users",
-				[ 7, "Fetched User Count" ],
+				[ 7,  "Fetched User Count" ],
 				"---",
-				[ 8, "Name" ],
-				[ 9, "Username" ],
+				[ 8,  "Name" ],
+				[ 9,  "Username" ],
 				[ 10, "ID" ],
 				[ 11, "Description" ],
 				[ 12, "Avatar URL" ],
@@ -1093,6 +1094,11 @@
 			{
 				// [57] Internal Data -> Get Private Key
 				"Title": "PrivateKey$(",
+				"Returns": "String"
+			},
+			{
+				// [58] Internal Data -> Get Request URL
+				"Title": "RequestURL$(",
 				"Returns": "String"
 			}
 		],
