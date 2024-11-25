@@ -195,6 +195,7 @@
 				[
 					"Table Scores",
 					[ 21, "Fetched Score Count" ],
+					[ 59, "Table ID" ],
 					"---",
 					[ 22, "Username" ],
 					[ 23, "UserID" ],
@@ -1100,6 +1101,11 @@
 				// [58] Internal Data -> Get Request URL
 				"Title": "RequestURL$(",
 				"Returns": "String"
+			},
+			{
+				// [59] Scores -> Table Scores -> Table ID
+				"Title": "TSTableId(",
+				"Returns": "Integer"
 			}
 		],
 		"Properties": [

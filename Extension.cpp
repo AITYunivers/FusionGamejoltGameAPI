@@ -147,6 +147,7 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
 	LinkExpression(27, Exp_FetchedScoreExtraData);
 	LinkExpression(28, Exp_FetchedScoreSubmit);
 	LinkExpression(29, Exp_FetchedScoreSubmitTimestamp);
+	LinkExpression(59, Exp_FetchedScoreTableID);
 	LinkExpression(30, Exp_FetchedTableCount);
 	LinkExpression(31, Exp_FetchedTableName);
 	LinkExpression(32, Exp_FetchedTableID);
@@ -328,6 +329,7 @@ REFLAG Extension::Handle()
 			TriggerBuffer.pop_front();
 			if (LatestResponse->HasTrigger)
 				Runtime.GenerateEvent(LatestResponse->Trigger);
+			Runtime.GenerateEvent(Cnd_AnyCallFinished);
 		}
 		TriggerLock.edif_unlock();
 	}

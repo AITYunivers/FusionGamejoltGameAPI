@@ -20,6 +20,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 #include <algorithm>
+#include <regex>
 #include "GameAuth.h"
 using json = nlohmann::json;
 
@@ -38,7 +39,7 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 254;
-	static const int Version = 2;
+	static const int Version = 3;
 
 	// If you change OEFLAGS, make sure you modify RUNDATA so the data is available, or you'll get crashes!
 	// For example, OEFLAGS::VALUES makes use of the AltVals rv struct.
@@ -266,6 +267,7 @@ public:
 	const TCHAR* Exp_FetchedScoreExtraData(int index);
 	const TCHAR* Exp_FetchedScoreSubmit(int index);
 	int	 Exp_FetchedScoreSubmitTimestamp(int index);
+	int	 Exp_FetchedScoreTableID();
 	int	 Exp_FetchedTableCount();
 	const TCHAR* Exp_FetchedTableName(int index);
 	int Exp_FetchedTableID(int index);
