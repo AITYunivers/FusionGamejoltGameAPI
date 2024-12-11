@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <regex>
 #include "GameAuth.h"
-using json = nlohmann::json;
 
 class Extension
 {
@@ -39,7 +38,7 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 254;
-	static const int Version = 3;
+	static const int Version = 4;
 
 	// If you change OEFLAGS, make sure you modify RUNDATA so the data is available, or you'll get crashes!
 	// For example, OEFLAGS::VALUES makes use of the AltVals rv struct.
@@ -71,7 +70,7 @@ public:
 	void SetTrigger(std::unique_ptr<ResponseTicket> ticket, int trigger);
 	std::tstring URLEncode(std::tstring str);
 	std::tstring URLDecode(std::tstring str);
-	json GetJson();
+	nlohmann::json GetJson();
 	std::vector<char> EncodingChars;
 #pragma endregion
 

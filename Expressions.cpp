@@ -5,7 +5,7 @@ const TCHAR * Extension::Exp_GetJsonResponse()
 {
 	if (LatestResponse->Type == Unknown)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(j.dump(4)).c_str());
 }
 
@@ -63,7 +63,7 @@ const TCHAR* Extension::Exp_GetResponseStatus()
 {
 	if (LatestResponse->Type == Unknown)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string status;
 	j["response"]["success"].get_to(status);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(status).c_str());
@@ -73,7 +73,7 @@ const TCHAR* Extension::Exp_GetResponseMessage()
 {
 	if (LatestResponse->Type == Unknown)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"].contains("message"))
 		return Runtime.CopyString(_T(""));
 	std::string message;
@@ -120,7 +120,7 @@ int Extension::Exp_FetchedUserCount()
 {
 	if (LatestResponse->Type != FetchUsers)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array())
 		return 0;
 	return j["response"]["users"].size();
@@ -130,7 +130,7 @@ const TCHAR* Extension::Exp_FetchedUserDisplayName(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string displayName;
@@ -142,7 +142,7 @@ const TCHAR* Extension::Exp_FetchedUsername(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string username;
@@ -154,7 +154,7 @@ int Extension::Exp_FetchedUserID(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return 0;
 	std::string id;
@@ -166,7 +166,7 @@ const TCHAR* Extension::Exp_FetchedUserDescription(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string desc;
@@ -178,7 +178,7 @@ const TCHAR* Extension::Exp_FetchedUserAvatar(int index, int resolution)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string avatar;
@@ -191,7 +191,7 @@ const TCHAR* Extension::Exp_FetchedUserWebsite(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string website;
@@ -203,7 +203,7 @@ const TCHAR* Extension::Exp_FetchedUserStatus(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string status;
@@ -215,7 +215,7 @@ const TCHAR* Extension::Exp_FetchedUserType(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string type;
@@ -227,7 +227,7 @@ const TCHAR* Extension::Exp_FetchedUserLastLoggedIn(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string login;
@@ -239,7 +239,7 @@ int Extension::Exp_FetchedUserLastLoggedInTimestamp(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return 0;
 	int loginStamp;
@@ -251,7 +251,7 @@ const TCHAR* Extension::Exp_FetchedUserSignedUp(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string signUp;
@@ -263,7 +263,7 @@ int Extension::Exp_FetchedUserSignedUpTimestamp(int index)
 {
 	if (LatestResponse->Type != FetchUsers)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
 		return 0;
 	int signUpStamp;
@@ -277,7 +277,7 @@ int Extension::Exp_ScoreRanking()
 {
 	if (LatestResponse->Type != GetRank)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	int ranking;
 	j["response"]["rank"].get_to(ranking);
 	return ranking;
@@ -289,7 +289,7 @@ int Extension::Exp_FetchedScoreCount()
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array())
 		return 0;
 	return j["response"]["scores"].size();
@@ -299,7 +299,7 @@ const TCHAR* Extension::Exp_FetchedScoreUsername(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string username;
@@ -311,7 +311,7 @@ int Extension::Exp_FetchedScoreUserID(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return 0;
 	std::string userId;
@@ -323,7 +323,7 @@ const TCHAR* Extension::Exp_FetchedScoreGuestName(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string guestName;
@@ -335,7 +335,7 @@ const TCHAR* Extension::Exp_FetchedScoreScore(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string score;
@@ -347,7 +347,7 @@ int Extension::Exp_FetchedScoreSort(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return 0;
 	std::string sort;
@@ -359,7 +359,7 @@ const TCHAR* Extension::Exp_FetchedScoreExtraData(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string data;
@@ -371,7 +371,7 @@ const TCHAR* Extension::Exp_FetchedScoreSubmit(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string submitTime;
@@ -383,7 +383,7 @@ int Extension::Exp_FetchedScoreSubmitTimestamp(int index)
 {
 	if (LatestResponse->Type != ResponseType::FetchScores)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
 		return 0;
 	int submitStamp;
@@ -410,7 +410,7 @@ int Extension::Exp_FetchedTableCount()
 {
 	if (LatestResponse->Type != ScoreTables)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["tables"].is_array())
 		return 0;
 	return j["response"]["tables"].size();
@@ -420,7 +420,7 @@ const TCHAR* Extension::Exp_FetchedTableName(int index)
 {
 	if (LatestResponse->Type != ScoreTables)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string name;
@@ -432,7 +432,7 @@ int Extension::Exp_FetchedTableID(int index)
 {
 	if (LatestResponse->Type != ScoreTables)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
 		return 0;
 	std::string id;
@@ -444,7 +444,7 @@ const TCHAR* Extension::Exp_FetchedTableDescription(int index)
 {
 	if (LatestResponse->Type != ScoreTables)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string desc;
@@ -456,7 +456,7 @@ int Extension::Exp_FetchedTableIsPrimary(int index)
 {
 	if (LatestResponse->Type != ScoreTables)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
 		return 0;
 	std::string prim;
@@ -470,7 +470,7 @@ int Extension::Exp_FetchedTrophyCount()
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array())
 		return 0;
 	return j["response"]["trophies"].size();
@@ -480,7 +480,7 @@ const TCHAR* Extension::Exp_FetchedTrophyTitle(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string name;
@@ -492,7 +492,7 @@ int Extension::Exp_FetchedTrophyID(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return 0;
 	std::string id;
@@ -504,7 +504,7 @@ const TCHAR* Extension::Exp_FetchedTrophyDescription(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string desc;
@@ -516,7 +516,7 @@ const TCHAR* Extension::Exp_FetchedTrophyDifficulty(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string diff;
@@ -528,7 +528,7 @@ const TCHAR* Extension::Exp_FetchedTrophyImageURL(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string img;
@@ -540,7 +540,7 @@ const TCHAR* Extension::Exp_FetchedTrophyAchieved(int index)
 {
 	if (LatestResponse->Type != FetchTrophies)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string achieved;
@@ -554,7 +554,7 @@ const TCHAR* Extension::Exp_RetrievedKeyData()
 {
 	if (LatestResponse->Type != FetchData)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string data;
 	j["response"]["data"].get_to(data);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(data).c_str());
@@ -566,7 +566,7 @@ int Extension::Exp_FetchedKeyCount()
 {
 	if (LatestResponse->Type != GetDataKeys)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["keys"].is_array())
 		return 0;
 	return j["response"]["keys"].size();
@@ -576,7 +576,7 @@ const TCHAR* Extension::Exp_FetchedKey(int index)
 {
 	if (LatestResponse->Type != GetDataKeys)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["keys"].is_array() || j["response"]["keys"].size() == 0)
 		return Runtime.CopyString(_T(""));
 	std::string key;
@@ -590,7 +590,7 @@ const TCHAR* Extension::Exp_UpdatedKeyData()
 {
 	if (LatestResponse->Type != UpdateData)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string data;
 	j["response"]["data"].get_to(data);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(data).c_str());
@@ -602,7 +602,7 @@ int Extension::Exp_FetchedFriendCount()
 {
 	if (LatestResponse->Type != Friends)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["friends"].is_array())
 		return 0;
 	return j["response"]["friends"].size();
@@ -612,7 +612,7 @@ int Extension::Exp_FetchedFriend(int index)
 {
 	if (LatestResponse->Type != Friends)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	if (!j["response"]["friends"].is_array() || j["response"]["friends"].size() == 0)
 		return 0;
 	std::string id;
@@ -626,7 +626,7 @@ int Extension::Exp_TimeYear()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string year;
 	j["response"]["year"].get_to(year);
 	return stoi(year);
@@ -636,7 +636,7 @@ int Extension::Exp_TimeMonth()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string month;
 	j["response"]["month"].get_to(month);
 	return stoi(month);
@@ -646,7 +646,7 @@ int Extension::Exp_TimeDay()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string day;
 	j["response"]["day"].get_to(day);
 	return stoi(day);
@@ -656,7 +656,7 @@ int Extension::Exp_TimeHour()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string hour;
 	j["response"]["hour"].get_to(hour);
 	return stoi(hour);
@@ -666,7 +666,7 @@ int Extension::Exp_TimeMinute()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string minute;
 	j["response"]["minute"].get_to(minute);
 	return stoi(minute);
@@ -676,7 +676,7 @@ int Extension::Exp_TimeSecond()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string second;
 	j["response"]["second"].get_to(second);
 	return stoi(second);
@@ -686,7 +686,7 @@ int Extension::Exp_TimeTimestamp()
 {
 	if (LatestResponse->Type != Time)
 		return 0;
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	int timeStamp;
 	j["response"]["timestamp"].get_to(timeStamp);
 	return timeStamp;
@@ -696,7 +696,7 @@ const TCHAR* Extension::Exp_TimeTimezone()
 {
 	if (LatestResponse->Type != Time)
 		return Runtime.CopyString(_T(""));
-	json j = GetJson();
+	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	std::string timeZone;
 	j["response"]["timezone"].get_to(timeZone);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(timeZone).c_str());

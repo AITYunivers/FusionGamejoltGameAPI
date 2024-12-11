@@ -288,7 +288,7 @@ std::tstring Extension::URLDecode(std::tstring str) {
 	return ret;
 }
 
-json Extension::GetJson()
+nlohmann::json Extension::GetJson()
 {
 #ifdef _UNICODE
 	const char* src = LatestResponse->Response->body.c_str();
@@ -312,9 +312,9 @@ json Extension::GetJson()
 			}
 		}
 	}
-	json j = json::parse(jDataU);
+	nlohmann::json j = nlohmann::json::parse(jDataU);
 #else
-	json j = json::parse(LatestResponse->Response->body.c_str());
+	nlohmann::json j = nlohmann::json::parse(LatestResponse->Response->body.c_str());
 #endif
 	return j;
 }
@@ -325,8 +325,11 @@ REFLAG Extension::Handle()
 	{
 		while (!TriggerBuffer.empty())
 		{
+			//if (LatestResponse)
+			//	LatestResponse.reset();
+
 			std::swap(LatestResponse, TriggerBuffer[0]);
-			TriggerBuffer.pop_front();
+			TriggerBuffer.clear();
 			if (LatestResponse->HasTrigger)
 				Runtime.GenerateEvent(LatestResponse->Trigger);
 			Runtime.GenerateEvent(Cnd_AnyCallFinished);
@@ -382,4 +385,17 @@ long Extension::UnlinkedExpression(int ID)
 	if ((size_t)ID < Edif::SDK->ExpressionInfos.size() && Edif::SDK->ExpressionInfos[ID]->Flags.ef == ExpReturnType::String)
 		return (long)Runtime.CopyString(_T(""));
 	return 0;
+}
+
+ResponseTicket::~ResponseTicket()
+{
+	if (cached_json)
+		cached_json.reset();
+}
+
+nlohmann::json ResponseTicket::GetResponseJson(Extension* ext)
+{
+	if (!cached_json)
+		cached_json = std::make_unique<nlohmann::json>(ext->GetJson());
+	return *cached_json;
 }

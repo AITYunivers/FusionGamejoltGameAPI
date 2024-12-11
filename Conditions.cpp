@@ -7,6 +7,5 @@ bool Extension::Cnd_AnyCallTriggered()
 
 bool Extension::Cnd_CallTriggered()
 {
-	Runtime.GenerateEvent(Cnd_AnyCallFinished);
 	return true;
 }
