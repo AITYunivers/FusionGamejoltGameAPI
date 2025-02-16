@@ -214,7 +214,7 @@ void Extension::Act_AddUserScore(const TCHAR* displayScore, int sortScore, int t
 
 void Extension::AddUserScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&score=") + displayScore + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
 	std::tstring extraDataStr = URLEncode(extraData);
@@ -235,7 +235,7 @@ void Extension::Act_AddGuestScore(const TCHAR* displayScore, int sortScore, int 
 
 void Extension::AddGuestScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GameAuthData->GuestName + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GameAuthData->GuestName + _T("&score=") + displayScore + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
 	std::tstring extraDataStr = URLEncode(extraData);
