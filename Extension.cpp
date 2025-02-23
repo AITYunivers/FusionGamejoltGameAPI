@@ -228,39 +228,6 @@ void Extension::SetTrigger(std::unique_ptr<ResponseTicket> ticket, int trigger)
 	TriggerLock.edif_unlock();
 }
 
-std::tstring Extension::URLEncode(std::tstring str) {
-#ifndef _WIN32
-#define _istalnum isalnum
-#define _stprintf sprintf
-#endif
-	std::tstring new_str = _T("");
-	TCHAR c;
-	int ic;
-	const TCHAR* chars = str.c_str();
-	TCHAR bufHex[10];
-	int len = _tcslen(chars);
-
-	for (int i = 0; i < len; i++) {
-		c = chars[i];
-		ic = c;
-		if (c == _T(' '))
-			new_str += _T('+');
-		else if (std::find(EncodingChars.begin(), EncodingChars.end(), c) != EncodingChars.end() ||
-				 ic <= 32 || ic >= 127)
-		{
-			_stprintf(bufHex, _T("%X"), c);
-			if (ic < 16)
-				new_str += _T("%0");
-			else
-				new_str += _T("%");
-			new_str += bufHex;
-		}
-		else
-			new_str += c;
-	}
-	return new_str;
-}
-
 std::tstring Extension::URLDecode(std::tstring str) {
 #ifndef _WIN32
 #define _stscanf sscanf
