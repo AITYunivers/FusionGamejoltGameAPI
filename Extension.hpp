@@ -38,7 +38,7 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 254;
-	static const int Version = 4;
+	static const int Version = 5;
 
 	// If you change OEFLAGS, make sure you modify RUNDATA so the data is available, or you'll get crashes!
 	// For example, OEFLAGS::VALUES makes use of the AltVals rv struct.
@@ -46,18 +46,18 @@ public:
 	static const OEPREFS OEPREFS = OEPREFS::NONE;
 
 	static const int WindowProcPriority = 100;
-
+	
 #ifdef _WIN32
 	Extension(RunObject* const rdPtr, const EDITDATA* const edPtr, const CreateObjectInfo* const cobPtr);
 #elif defined(__ANDROID__)
-	Extension(const EDITDATA* const edPtr, const jobject javaExtPtr);
+	Extension(const EDITDATA* const edPtr, const jobject javaExtPtr, const CreateObjectInfo* const cobPtr);
 #else
-	Extension(const EDITDATA* const edPtr, void* const objCExtPtr);
+	Extension(const EDITDATA* const edPtr, void* const objCExtPtr, const CreateObjectInfo* const cobPtr);
 #endif
 	~Extension();
 
 #pragma region JoltData
-	std::tstring JoltBase = _T("http://api.gamejolt.com");
+	std::tstring JoltBase = _T("http:\/\/api.gamejolt.com");
 	std::tstring GameID = _T("");
 	std::tstring PrivateKey = _T("");
 	GameAuth* GameAuthData;
@@ -187,6 +187,7 @@ public:
 
 
 #define Cnd_AnyCallFinished		31
+#define Cnd_OnError				32
 
 #define Cnd_AuthFinished		0
 #define Cnd_FetchFinished		1
@@ -234,6 +235,7 @@ public:
 	const TCHAR* Exp_GetResponseType();
 	const TCHAR* Exp_GetResponseStatus();
 	const TCHAR* Exp_GetResponseMessage();
+	const TCHAR* Exp_GetErrorMessage();
 
 	const TCHAR* Exp_GetGameID();
 	const TCHAR* Exp_GetPrivateKey();

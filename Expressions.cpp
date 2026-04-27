@@ -3,7 +3,7 @@
 #pragma region Response
 const TCHAR * Extension::Exp_GetJsonResponse()
 {
-	if (LatestResponse->Type == Unknown)
+	if (LatestResponse->Type == Unknown || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(j.dump(4)).c_str());
@@ -61,9 +61,14 @@ const TCHAR * Extension::Exp_GetResponseType()
 
 const TCHAR* Extension::Exp_GetResponseStatus()
 {
-	if (LatestResponse->Type == Unknown)
+	if (LatestResponse->Type == Unknown || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("success"))
+		return Runtime.CopyString(_T(""));
+
 	std::string status;
 	j["response"]["success"].get_to(status);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(status).c_str());
@@ -71,14 +76,22 @@ const TCHAR* Extension::Exp_GetResponseStatus()
 
 const TCHAR* Extension::Exp_GetResponseMessage()
 {
-	if (LatestResponse->Type == Unknown)
+	if (LatestResponse->Type == Unknown || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"].contains("message"))
+	if (!j.contains("response") || !j["response"].contains("message"))
 		return Runtime.CopyString(_T(""));
 	std::string message;
 	j["response"]["message"].get_to(message);
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(message).c_str());
+}
+
+const TCHAR* Extension::Exp_GetErrorMessage()
+{
+	if (LatestResponse->Response)
+		return Runtime.CopyString(_T(""));
+	httplib::Error err = LatestResponse->Response.error();
+	return Runtime.CopyString(DarkEdif::UTF8ToTString(httplib::to_string(err)).c_str());
 }
 #pragma endregion
 
@@ -118,156 +131,255 @@ const TCHAR * Extension::Exp_GetGuestName()
 #pragma region Fetched Users
 int Extension::Exp_FetchedUserCount()
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array())
 		return 0;
+
 	return j["response"]["users"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedUserDisplayName(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("developer_name"))
+		return Runtime.CopyString(_T(""));
+
 	std::string displayName;
-	j["response"]["users"][index]["developer_name"].get_to(displayName);
+	user["developer_name"].get_to(displayName);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(displayName).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUsername(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("username"))
+		return Runtime.CopyString(_T(""));
+
 	std::string username;
-	j["response"]["users"][index]["username"].get_to(username);
+	user["username"].get_to(username);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(username).c_str());
 }
 
 int Extension::Exp_FetchedUserID(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return 0;
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("id"))
+		return 0;
+
 	std::string id;
-	j["response"]["users"][index]["id"].get_to(id);
+	user["id"].get_to(id);
+
 	return stoi(id);
 }
 
 const TCHAR* Extension::Exp_FetchedUserDescription(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("developer_description"))
+		return Runtime.CopyString(_T(""));
+
 	std::string desc;
-	j["response"]["users"][index]["developer_description"].get_to(desc);
+	user["developer_description"].get_to(desc);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(desc).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUserAvatar(int index, int resolution)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("avatar_url"))
+		return Runtime.CopyString(_T(""));
+
 	std::string avatar;
-	j["response"]["users"][index]["avatar_url"].get_to(avatar);
+	user["avatar_url"].get_to(avatar);
+
 	std::tstring avatarOut = _T("https://m.gjcdn.net/user-avatar/") + std::to_tstring(resolution) + DarkEdif::UTF8ToTString(avatar.substr(34, avatar.length() - 38)) + _T(".png");
 	return Runtime.CopyString(avatarOut.c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUserWebsite(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("developer_website"))
+		return Runtime.CopyString(_T(""));
+
 	std::string website;
-	j["response"]["users"][index]["developer_website"].get_to(website);
+	user["developer_website"].get_to(website);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(website).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUserStatus(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("status"))
+		return Runtime.CopyString(_T(""));
+
 	std::string status;
-	j["response"]["users"][index]["status"].get_to(status);
+	user["status"].get_to(status);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(status).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUserType(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("type"))
+		return Runtime.CopyString(_T(""));
+
 	std::string type;
-	j["response"]["users"][index]["type"].get_to(type);
+	user["type"].get_to(type);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(type).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedUserLastLoggedIn(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("last_logged_in"))
+		return Runtime.CopyString(_T(""));
+
 	std::string login;
-	j["response"]["users"][index]["last_logged_in"].get_to(login);
+	user["last_logged_in"].get_to(login);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(login).c_str());
 }
 
 int Extension::Exp_FetchedUserLastLoggedInTimestamp(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return 0;
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("last_logged_in_timestamp"))
+		return 0;
+
 	int loginStamp;
-	j["response"]["users"][index]["last_logged_in_timestamp"].get_to(loginStamp);
+	user["last_logged_in_timestamp"].get_to(loginStamp);
+
 	return loginStamp;
 }
 
 const TCHAR* Extension::Exp_FetchedUserSignedUp(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("signed_up"))
+		return Runtime.CopyString(_T(""));
+
 	std::string signUp;
-	j["response"]["users"][index]["signed_up"].get_to(signUp);
+	user["signed_up"].get_to(signUp);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(signUp).c_str());
 }
 
 int Extension::Exp_FetchedUserSignedUpTimestamp(int index)
 {
-	if (LatestResponse->Type != FetchUsers)
+	if (LatestResponse->Type != FetchUsers || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["users"].is_array() || j["response"]["users"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array() || j["response"]["users"].size() <= index)
 		return 0;
+	nlohmann::json user = j["response"]["users"][index];
+
+	if (!user.contains("signed_up_timestamp"))
+		return 0;
+
 	int signUpStamp;
-	j["response"]["users"][index]["signed_up_timestamp"].get_to(signUpStamp);
+	user["signed_up_timestamp"].get_to(signUpStamp);
+
 	return signUpStamp;
 }
 #pragma endregion
@@ -275,11 +387,17 @@ int Extension::Exp_FetchedUserSignedUpTimestamp(int index)
 #pragma region Scores -> Get Ranking
 int Extension::Exp_ScoreRanking()
 {
-	if (LatestResponse->Type != GetRank)
+	if (LatestResponse->Type != GetRank || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("rank"))
+		return 0;
+
 	int ranking;
 	j["response"]["rank"].get_to(ranking);
+
 	return ranking;
 }
 #pragma endregion
@@ -287,113 +405,180 @@ int Extension::Exp_ScoreRanking()
 #pragma region Scores -> Table Scores
 int Extension::Exp_FetchedScoreCount()
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array())
 		return 0;
+
 	return j["response"]["scores"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedScoreUsername(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("user"))
+		return Runtime.CopyString(_T(""));
+
 	std::string username;
-	j["response"]["scores"][index]["user"].get_to(username);
+	score["user"].get_to(username);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(username).c_str());
 }
 
 int Extension::Exp_FetchedScoreUserID(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return 0;
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("user_id"))
+		return 0;
+
 	std::string userId;
-	j["response"]["scores"][index]["user_id"].get_to(userId);
+	score["user_id"].get_to(userId);
+
 	return stoi(userId);
 }
 
 const TCHAR* Extension::Exp_FetchedScoreGuestName(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("guest"))
+		return Runtime.CopyString(_T(""));
+
 	std::string guestName;
-	j["response"]["scores"][index]["guest"].get_to(guestName);
+	score["guest"].get_to(guestName);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(guestName).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedScoreScore(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return Runtime.CopyString(_T(""));
-	std::string score;
-	j["response"]["scores"][index]["score"].get_to(score);
-	return Runtime.CopyString(DarkEdif::UTF8ToTString(score).c_str());
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("score"))
+		return Runtime.CopyString(_T(""));
+
+	std::string scoreStr;
+	score["score"].get_to(scoreStr);
+	return Runtime.CopyString(DarkEdif::UTF8ToTString(scoreStr).c_str());
 }
 
 int Extension::Exp_FetchedScoreSort(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return 0;
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("sort"))
+		return 0;
+
 	std::string sort;
-	j["response"]["scores"][index]["sort"].get_to(sort);
+	score["sort"].get_to(sort);
+
 	return stoi(sort);
 }
 
 const TCHAR* Extension::Exp_FetchedScoreExtraData(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("extra_data"))
+		return Runtime.CopyString(_T(""));
+
 	std::string data;
-	j["response"]["scores"][index]["extra_data"].get_to(data);
+	score["extra_data"].get_to(data);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(data).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedScoreSubmit(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("stored"))
+		return Runtime.CopyString(_T(""));
+
 	std::string submitTime;
-	j["response"]["scores"][index]["stored"].get_to(submitTime);
+	score["stored"].get_to(submitTime);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(submitTime).c_str());
 }
 
 int Extension::Exp_FetchedScoreSubmitTimestamp(int index)
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["scores"].is_array() || j["response"]["scores"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array() || j["response"]["scores"].size() <= index)
 		return 0;
+	nlohmann::json score = j["response"]["scores"][index];
+
+	if (!score.contains("stored_timestamp"))
+		return 0;
+
 	int submitStamp;
-	j["response"]["scores"][index]["stored_timestamp"].get_to(submitStamp);
+	score["stored_timestamp"].get_to(submitStamp);
+
 	return submitStamp;
 }
 
 int Extension::Exp_FetchedScoreTableID()
 {
-	if (LatestResponse->Type != ResponseType::FetchScores)
+	if (LatestResponse->Type != ResponseType::FetchScores || !LatestResponse->Response)
 		return 0;
 
 	std::regex re("table_id=([0-9]+)");
@@ -408,59 +593,94 @@ int Extension::Exp_FetchedScoreTableID()
 #pragma region Scores -> Fetched Tables
 int Extension::Exp_FetchedTableCount()
 {
-	if (LatestResponse->Type != ScoreTables)
+	if (LatestResponse->Type != ScoreTables || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["tables"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array())
 		return 0;
+
 	return j["response"]["tables"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedTableName(int index)
 {
-	if (LatestResponse->Type != ScoreTables)
+	if (LatestResponse->Type != ScoreTables || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array() || j["response"]["tables"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json table = j["response"]["tables"][index];
+
+	if (!table.contains("name"))
+		return Runtime.CopyString(_T(""));
+
 	std::string name;
-	j["response"]["tables"][index]["name"].get_to(name);
+	table["name"].get_to(name);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(name).c_str());
 }
 
 int Extension::Exp_FetchedTableID(int index)
 {
-	if (LatestResponse->Type != ScoreTables)
+	if (LatestResponse->Type != ScoreTables || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array() || j["response"]["tables"].size() <= index)
 		return 0;
+	nlohmann::json table = j["response"]["tables"][index];
+
+	if (!table.contains("id"))
+		return 0;
+
 	std::string id;
-	j["response"]["tables"][index]["id"].get_to(id);
+	table["id"].get_to(id);
+
 	return stoi(id);
 }
 
 const TCHAR* Extension::Exp_FetchedTableDescription(int index)
 {
-	if (LatestResponse->Type != ScoreTables)
+	if (LatestResponse->Type != ScoreTables || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array() || j["response"]["tables"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json table = j["response"]["tables"][index];
+
+	if (!table.contains("description"))
+		return Runtime.CopyString(_T(""));
+
 	std::string desc;
-	j["response"]["tables"][index]["description"].get_to(desc);
+	table["description"].get_to(desc);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(desc).c_str());
 }
 
 int Extension::Exp_FetchedTableIsPrimary(int index)
 {
-	if (LatestResponse->Type != ScoreTables)
+	if (LatestResponse->Type != ScoreTables || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["tables"].is_array() || j["response"]["tables"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array() || j["response"]["tables"].size() <= index)
 		return 0;
+	nlohmann::json table = j["response"]["tables"][index];
+
+	if (!table.contains("primary"))
+		return 0;
+
 	std::string prim;
-	j["response"]["tables"][index]["primary"].get_to(prim);
+	table["primary"].get_to(prim);
+
 	return prim == "1" ? 1 : 0;
 }
 #pragma endregion
@@ -468,83 +688,133 @@ int Extension::Exp_FetchedTableIsPrimary(int index)
 #pragma region Fetched Trophies
 int Extension::Exp_FetchedTrophyCount()
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array())
 		return 0;
+
 	return j["response"]["trophies"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyTitle(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("title"))
+		return Runtime.CopyString(_T(""));
+
 	std::string name;
-	j["response"]["trophies"][index]["title"].get_to(name);
+	trophy["title"].get_to(name);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(name).c_str());
 }
 
 int Extension::Exp_FetchedTrophyID(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return 0;
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("id"))
+		return 0;
+
 	std::string id;
-	j["response"]["trophies"][index]["id"].get_to(id);
+	trophy["id"].get_to(id);
+
 	return stoi(id);
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyDescription(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("description"))
+		return Runtime.CopyString(_T(""));
+
 	std::string desc;
-	j["response"]["trophies"][index]["description"].get_to(desc);
+	trophy["description"].get_to(desc);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(desc).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyDifficulty(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("difficulty"))
+		return Runtime.CopyString(_T(""));
+
 	std::string diff;
-	j["response"]["trophies"][index]["difficulty"].get_to(diff);
+	trophy["difficulty"].get_to(diff);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(diff).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyImageURL(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("image_url"))
+		return Runtime.CopyString(_T(""));
+
 	std::string img;
-	j["response"]["trophies"][index]["image_url"].get_to(img);
+	trophy["image_url"].get_to(img);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(img).c_str());
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyAchieved(int index)
 {
-	if (LatestResponse->Type != FetchTrophies)
+	if (LatestResponse->Type != FetchTrophies || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["trophies"].is_array() || j["response"]["trophies"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array() || j["response"]["trophies"].size() <= index)
 		return Runtime.CopyString(_T(""));
+	nlohmann::json trophy = j["response"]["trophies"][index];
+
+	if (!trophy.contains("achieved"))
+		return Runtime.CopyString(_T(""));
+
 	std::string achieved;
-	j["response"]["trophies"][index]["achieved"].get_to(achieved);
+	trophy["achieved"].get_to(achieved);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(achieved).c_str());
 }
 #pragma endregion
@@ -552,11 +822,17 @@ const TCHAR* Extension::Exp_FetchedTrophyAchieved(int index)
 #pragma region Data Storage -> Retrieved Key Data
 const TCHAR* Extension::Exp_RetrievedKeyData()
 {
-	if (LatestResponse->Type != FetchData)
+	if (LatestResponse->Type != FetchData || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("data"))
+		return Runtime.CopyString(_T(""));
+
 	std::string data;
 	j["response"]["data"].get_to(data);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(data).c_str());
 }
 #pragma endregion
@@ -564,35 +840,52 @@ const TCHAR* Extension::Exp_RetrievedKeyData()
 #pragma region Data Storage -> Fetched Keys
 int Extension::Exp_FetchedKeyCount()
 {
-	if (LatestResponse->Type != GetDataKeys)
+	if (LatestResponse->Type != GetDataKeys || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["keys"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("keys") || !j["response"]["keys"].is_array())
 		return 0;
+
 	return j["response"]["keys"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedKey(int index)
 {
-	if (LatestResponse->Type != GetDataKeys)
+	if (LatestResponse->Type != GetDataKeys || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["keys"].is_array() || j["response"]["keys"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("keys") || !j["response"]["keys"].is_array() || j["response"]["keys"].size() <= index)
 		return Runtime.CopyString(_T(""));
-	std::string key;
-	j["response"]["keys"][index]["key"].get_to(key);
-	return Runtime.CopyString(DarkEdif::UTF8ToTString(key).c_str());
+	nlohmann::json key = j["response"]["keys"][index];
+
+	if (!key.contains("key"))
+		return Runtime.CopyString(_T(""));
+
+	std::string keyStr;
+	key["key"].get_to(keyStr);
+
+	return Runtime.CopyString(DarkEdif::UTF8ToTString(keyStr).c_str());
 }
 #pragma endregion
 
 #pragma region Data Storage -> Updated Key Data
 const TCHAR* Extension::Exp_UpdatedKeyData()
 {
-	if (LatestResponse->Type != UpdateData)
+	if (LatestResponse->Type != UpdateData || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("data"))
+		return Runtime.CopyString(_T(""));
+
 	std::string data;
 	j["response"]["data"].get_to(data);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(data).c_str());
 }
 #pragma endregion
@@ -600,23 +893,32 @@ const TCHAR* Extension::Exp_UpdatedKeyData()
 #pragma region Extra -> Fetched Friends
 int Extension::Exp_FetchedFriendCount()
 {
-	if (LatestResponse->Type != Friends)
+	if (LatestResponse->Type != Friends || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["friends"].is_array())
+
+	if (!j.contains("response") || !j["response"].contains("friends") || !j["response"]["friends"].is_array())
 		return 0;
+
 	return j["response"]["friends"].size();
 }
 
 int Extension::Exp_FetchedFriend(int index)
 {
-	if (LatestResponse->Type != Friends)
+	if (LatestResponse->Type != Friends || !LatestResponse->Response)
 		return 0;
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
-	if (!j["response"]["friends"].is_array() || j["response"]["friends"].size() == 0)
+
+	if (!j.contains("response") || !j["response"].contains("friends") || !j["response"]["friends"].is_array() || j["response"]["friends"].size() <= index)
 		return 0;
+	nlohmann::json friend_ = j["response"]["friends"][index];
+
+	if (!friend_.contains("key"))
+		return 0;
+
 	std::string id;
-	j["response"]["friends"][index]["friend_id"].get_to(id);
+	friend_["friend_id"].get_to(id);
 	return stoi(id);
 }
 #pragma endregion
@@ -624,81 +926,129 @@ int Extension::Exp_FetchedFriend(int index)
 #pragma region Extra -> Time
 int Extension::Exp_TimeYear()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("year"))
+		return 0;
+
 	std::string year;
 	j["response"]["year"].get_to(year);
+
 	return stoi(year);
 }
 
 int Extension::Exp_TimeMonth()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("month"))
+		return 0;
+
 	std::string month;
 	j["response"]["month"].get_to(month);
+
 	return stoi(month);
 }
 
 int Extension::Exp_TimeDay()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("day"))
+		return 0;
+
 	std::string day;
 	j["response"]["day"].get_to(day);
+
 	return stoi(day);
 }
 
 int Extension::Exp_TimeHour()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("hour"))
+		return 0;
+
 	std::string hour;
 	j["response"]["hour"].get_to(hour);
+
 	return stoi(hour);
 }
 
 int Extension::Exp_TimeMinute()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("minute"))
+		return 0;
+
 	std::string minute;
 	j["response"]["minute"].get_to(minute);
+
 	return stoi(minute);
 }
 
 int Extension::Exp_TimeSecond()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("second"))
+		return 0;
+
 	std::string second;
 	j["response"]["second"].get_to(second);
+
 	return stoi(second);
 }
 
 int Extension::Exp_TimeTimestamp()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return 0;
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("timestamp"))
+		return 0;
+
 	int timeStamp;
 	j["response"]["timestamp"].get_to(timeStamp);
+
 	return timeStamp;
 }
 
 const TCHAR* Extension::Exp_TimeTimezone()
 {
-	if (LatestResponse->Type != Time)
+	if (LatestResponse->Type != Time || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
+	if (!j.contains("response") || !j["response"].contains("timezone"))
+		return Runtime.CopyString(_T(""));
+
 	std::string timeZone;
 	j["response"]["timezone"].get_to(timeZone);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(timeZone).c_str());
 }
 #pragma endregion

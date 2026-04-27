@@ -88,6 +88,7 @@
 		],
 		"ConditionMenu": [
 			[ 31, "Any Call finished" ],
+			[ 32, "On Error" ],
 			[
 				"Users",
 				[ 0, "Auth finished" ],
@@ -159,7 +160,8 @@
 				[ 0,  "Get JSON Response" ],
 				[ 1,  "Get Response Type" ],
 				[ 2,  "Get Response Status" ],
-				[ 3,  "Get Response Message" ]
+				[ 3,  "Get Response Message" ],
+				[ 60, "Get Error Message" ]
 			],
 			[
 				"Internal Data",
@@ -707,6 +709,11 @@
 				// [31] Any Call finished
 				"Title": "%o : On Any Call finished",
 				"Triggered": true
+			},
+			{
+				// [32] On Error
+				"Title": "%o : On Error",
+				"Triggered": true
 			}
 		],
 		"Expressions": [
@@ -1106,6 +1113,11 @@
 				// [59] Scores -> Table Scores -> Table ID
 				"Title": "TSTableId(",
 				"Returns": "Integer"
+			},
+			{
+				// [60] Response -> Get Error Message
+				"Title": "ErrorMsg$(",
+				"Returns": "String"
 			}
 		],
 		"Properties": [

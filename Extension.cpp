@@ -9,11 +9,11 @@
 Extension::Extension(RunObject* const _rdPtr, const EDITDATA* const edPtr, const CreateObjectInfo* const cobPtr) :
 	rdPtr(_rdPtr), rhPtr(_rdPtr->get_rHo()->get_AdRunHeader()), Runtime(this)
 #elif defined(__ANDROID__)
-Extension::Extension(const EDITDATA* const edPtr, const jobject javaExtPtr) :
+Extension::Extension(const EDITDATA* const edPtr, const jobject javaExtPtr, const CreateObjectInfo* const cobPtr) :
 	javaExtPtr(javaExtPtr, "Extension::javaExtPtr from Extension ctor"),
 	Runtime(this, this->javaExtPtr)
 #else
-Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
+Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr, const CreateObjectInfo* const cobPtr) :
 	objCExtPtr(objCExtPtr), Runtime(this, objCExtPtr)
 #endif
 {
@@ -69,6 +69,7 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
 
 
 	LinkCondition(31, Cnd_AnyCallTriggered	/* Cnd_AnyCallFinished   */);
+	LinkCondition(32, Cnd_CallTriggered		/* Cnd_OnError			 */);
 
 	LinkCondition(0,  Cnd_CallTriggered		/* Cnd_AuthFinished      */);
 	LinkCondition(1,  Cnd_CallTriggered		/* Cnd_FetchFinished     */);
@@ -115,6 +116,7 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr) :
 	LinkExpression(1, Exp_GetResponseType);
 	LinkExpression(2, Exp_GetResponseStatus);
 	LinkExpression(3, Exp_GetResponseMessage);
+	LinkExpression(60, Exp_GetErrorMessage);
 
 	LinkExpression(56, Exp_GetGameID);
 	LinkExpression(57, Exp_GetPrivateKey);
@@ -330,6 +332,14 @@ REFLAG Extension::Handle()
 
 			std::swap(LatestResponse, TriggerBuffer[0]);
 			TriggerBuffer.clear();
+
+			// Error Handling!
+			if (!LatestResponse->Response)
+			{
+				Runtime.GenerateEvent(Cnd_OnError);
+				continue;
+			}
+
 			if (LatestResponse->HasTrigger)
 				Runtime.GenerateEvent(LatestResponse->Trigger);
 			Runtime.GenerateEvent(Cnd_AnyCallFinished);

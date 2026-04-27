@@ -41,13 +41,22 @@
     <ProjectGuid>{710e343b-0b45-4ea5-ae98-e8c9afd850a2}</ProjectGuid>
     <Keyword>Android</Keyword>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <ApplicationType>Android</ApplicationType>
+    <ApplicationType>Android</ApplicationType>    
+    <AndroidAPILevel>android-31</AndroidAPILevel>
+    <AndroidAPILevelNumber>31</AndroidAPILevelNumber>
     <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
     <ProjectName>GamejoltGameAPI.Android</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Runtime|x86'">
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <Import Project="$(ProjectDir)\..\Lib\FusionSDK.props" Condition="exists('..\Lib\FusionSDK.props')" />
+  <PropertyGroup>
+    <AndroidAPILevel>android-31</AndroidAPILevel>
+    <AndroidAPILevelNumber>31</AndroidAPILevelNumber>
+  </PropertyGroup>
+  <Import Project="$(ProjectDir)\..\Lib\FusionSDK.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">

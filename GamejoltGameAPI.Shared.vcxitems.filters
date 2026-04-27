@@ -63,13 +63,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ResponseType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)json.hpp">
-      <Filter>Header Files\nlohmann</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ResponseTicket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameAuth.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\json.hpp">
+      <Filter>Header Files\nlohmann</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Runtime.cpp">
@@ -107,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)md5.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Lib\Shared\SurfaceMultiPlat.cpp">
+      <Filter>Global to all extensions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
