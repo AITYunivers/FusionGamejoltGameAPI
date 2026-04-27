@@ -8,8 +8,8 @@ void Extension::Act_Auth(const TCHAR* userName, const TCHAR* userToken)
 
 void Extension::Auth(const TCHAR* userName, const TCHAR* userToken)
 {
-	GameAuthData->UserName = URLEncode(userName);
-	GameAuthData->UserToken = URLEncode(userToken);
+	GameAuthData->UserName = userName;
+	GameAuthData->UserToken = userToken;
 	SetTrigger(
 		HttpGet(
 			_T("/api/game/v1_2/users/auth/?game_id=") +
@@ -38,8 +38,8 @@ void Extension::AuthCreds()
 		std::getline(file, GameAuthData->UserName);
 		std::getline(file, GameAuthData->UserToken);
 
-		GameAuthData->UserName = URLEncode(GameAuthData->UserName);
-		GameAuthData->UserToken = URLEncode(GameAuthData->UserToken);
+		GameAuthData->UserName = GameAuthData->UserName;
+		GameAuthData->UserToken = GameAuthData->UserToken;
 	}
 	SetTrigger(
 		HttpGet(
@@ -55,17 +55,17 @@ void Extension::AuthCreds()
 
 void Extension::Act_SetGameID(const TCHAR* gameId)
 {
-	GameID = URLEncode(gameId);
+	GameID = gameId;
 }
 
 void Extension::Act_SetPrivateKey(const TCHAR* privateKey)
 {
-	PrivateKey = URLEncode(privateKey);
+	PrivateKey = privateKey;
 }
 
 void Extension::Act_SetGuestName(const TCHAR* name)
 {
-	GameAuthData->GuestName = URLEncode(name);
+	GameAuthData->GuestName = name;
 }
 
 void Extension::Act_FetchUsername(const TCHAR* userName)
@@ -81,7 +81,7 @@ void Extension::FetchUsername(const TCHAR* userName)
 			_T("/api/game/v1_2/users/?game_id=") +
 			GameID +
 			_T("&username=") +
-			URLEncode(userName),
+			userName,
 			ResponseType::FetchUsers),
 		Cnd_FetchFinished);
 }
@@ -161,7 +161,7 @@ void Extension::PingStatusSession(const TCHAR* status)
 			_T("&user_token=") +
 			GameAuthData->UserToken +
 			_T("&status=") +
-			URLEncode(status),
+			status,
 			ResponseType::PingSession),
 		Cnd_PingFinished);
 }
@@ -214,10 +214,10 @@ void Extension::Act_AddUserScore(const TCHAR* displayScore, int sortScore, int t
 
 void Extension::AddUserScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&score=") + displayScore + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
-	std::tstring extraDataStr = URLEncode(extraData);
+	std::tstring extraDataStr = extraData;
 	if (extraDataStr.length() > 0)
 		url += _T("&extra_data=") + extraDataStr;
 	SetTrigger(
@@ -235,10 +235,10 @@ void Extension::Act_AddGuestScore(const TCHAR* displayScore, int sortScore, int 
 
 void Extension::AddGuestScore(const TCHAR* displayScore, int sortScore, int table, const TCHAR* extraData)
 {
-	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GameAuthData->GuestName + _T("&score=") + URLEncode(displayScore) + _T("&sort=") + std::to_tstring(sortScore);
+	std::tstring url = _T("/api/game/v1_2/scores/add/?game_id=") + GameID + _T("&guest=") + GameAuthData->GuestName + _T("&score=") + displayScore + _T("&sort=") + std::to_tstring(sortScore);
 	if (table != -1)
 		url += _T("&table_id=") + std::to_tstring(table);
-	std::tstring extraDataStr = URLEncode(extraData);
+	std::tstring extraDataStr = extraData;
 	if (extraDataStr.length() > 0)
 		url += _T("&extra_data=") + extraDataStr;
 	SetTrigger(
@@ -454,7 +454,7 @@ void Extension::GlobalStorageGetData(const TCHAR* key)
 			_T("/api/game/v1_2/data-store/?game_id=") +
 			GameID +
 			_T("&key=") +
-			URLEncode(key),
+			key,
 			ResponseType::FetchData),
 		Cnd_GSGetData);
 }
@@ -468,7 +468,7 @@ void Extension::Act_GlobalStorageGetKeys(const TCHAR* pattern)
 void Extension::GlobalStorageGetKeys(const TCHAR* pattern)
 {
 	std::tstring url = _T("/api/game/v1_2/data-store/get-keys/?game_id=") + GameID;
-	std::tstring patternStr = URLEncode(pattern);
+	std::tstring patternStr = pattern;
 	if (patternStr.length() > 0)
 		url += _T("&pattern=") + patternStr;
 	SetTrigger(
@@ -491,7 +491,7 @@ void Extension::GlobalStorageDeleteKey(const TCHAR* key)
 			_T("/api/game/v1_2/data-store/remove/?game_id=") +
 			GameID +
 			_T("&key=") +
-			URLEncode(key),
+			key,
 			ResponseType::RemoveData),
 		Cnd_GSDeleteKey);
 }
@@ -509,9 +509,9 @@ void Extension::GlobalStorageSetKey(const TCHAR* key, const TCHAR* data)
 			_T("/api/game/v1_2/data-store/set/?game_id=") +
 			GameID +
 			_T("&key=") +
-			URLEncode(key) +
+			key +
 			_T("&data=") +
-			URLEncode(data),
+			data,
 			ResponseType::SetData),
 		Cnd_GSSetKey);
 }
@@ -529,11 +529,11 @@ void Extension::GlobalStorageUpdateKey(const TCHAR* key, const TCHAR* data, cons
 			_T("/api/game/v1_2/data-store/update/?game_id=") +
 			GameID +
 			_T("&key=") +
-			URLEncode(key) +
+			key +
 			_T("&value=") +
-			URLEncode(data) +
+			data +
 			_T("&operation=") +
-			URLEncode(operation),
+			operation,
 			ResponseType::UpdateData),
 		Cnd_GSUpdateKey);
 }
@@ -555,7 +555,7 @@ void Extension::UserStorageGetData(const TCHAR* key)
 			_T("&user_token=") +
 			GameAuthData->UserToken +
 			_T("&key=") +
-			URLEncode(key),
+			key,
 			ResponseType::FetchData),
 		Cnd_USGetData);
 }
@@ -569,7 +569,7 @@ void Extension::Act_UserStorageGetKeys(const TCHAR* pattern)
 void Extension::UserStorageGetKeys(const TCHAR* pattern)
 {
 	std::tstring url = _T("/api/game/v1_2/data-store/get-keys/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken;
-	std::tstring patternStr = URLEncode(pattern);
+	std::tstring patternStr = pattern;
 	if (patternStr.length() > 0)
 		url += _T("&pattern=") + patternStr;
 	SetTrigger(
@@ -596,7 +596,7 @@ void Extension::UserStorageDeleteKey(const TCHAR* key)
 			_T("&user_token=") +
 			GameAuthData->UserToken +
 			_T("&key=") +
-			URLEncode(key),
+			key,
 			ResponseType::RemoveData),
 		Cnd_USDeleteKey);
 }
@@ -618,9 +618,9 @@ void Extension::UserStorageSetKey(const TCHAR* key, const TCHAR* data)
 			_T("&user_token=") +
 			GameAuthData->UserToken +
 			_T("&key=") +
-			URLEncode(key) +
+			key +
 			_T("&data=") +
-			URLEncode(data),
+			data,
 			ResponseType::SetData),
 		Cnd_USSetKey);
 }
@@ -642,11 +642,11 @@ void Extension::UserStorageUpdateKey(const TCHAR* key, const TCHAR* data, const 
 			_T("&user_token=") +
 			GameAuthData->UserToken +
 			_T("&key=") +
-			URLEncode(key) +
+			key +
 			_T("&value=") +
-			URLEncode(data) +
+			data +
 			_T("&operation=") +
-			URLEncode(operation),
+			operation,
 			ResponseType::UpdateData),
 		Cnd_USUpdateKey);
 }
@@ -686,7 +686,7 @@ void Extension::GlobalFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 	file.tellg();
 	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	file.close();
-	content = URLEncode(content);
+	content = content;
 	if (content.length() > 500000)
 	{
 #ifndef __ANDROID__
@@ -694,7 +694,7 @@ void Extension::GlobalFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&key=") = URLEncode(key) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&key=") + key + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::SetData;
 	//Cnd_FGSSetKey);
@@ -716,7 +716,7 @@ void Extension::GlobalFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePa
 	file.tellg();
 	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	file.close();
-	content = URLEncode(content);
+	content = content;
 	if (content.length() > 500000)
 	{
 #ifndef __ANDROID__
@@ -724,7 +724,7 @@ void Extension::GlobalFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePa
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&key=") = URLEncode(key) + _T("&operation=") + URLEncode(operation) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&key=") + key + _T("&operation=") + operation + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::UpdateData;
 	//Cnd_FGSUpdateKey);
@@ -761,7 +761,7 @@ void Extension::UserFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 	file.tellg();
 	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	file.close();
-	content = URLEncode(content);
+	content = content;
 	if (content.length() > 500000)
 	{
 #ifndef __ANDROID__
@@ -769,7 +769,7 @@ void Extension::UserFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") = URLEncode(key) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") + key + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::SetData;
 	//Cnd_FUSSetKey);
@@ -791,7 +791,7 @@ void Extension::UserFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath
 	file.tellg();
 	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	file.close();
-	content = URLEncode(content);
+	content = content;
 	if (content.length() > 500000)
 	{
 #ifndef __ANDROID__
@@ -799,7 +799,7 @@ void Extension::UserFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath
 #endif
 		return;
 	}
-	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") = URLEncode(key) + _T("&operation=") + URLEncode(operation) + _T("&data=") + content;
+	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") + key + _T("&operation=") + operation + _T("&data=") + content;
 	//HttpGet(url);
 	//LatestResponseType = ResponseType::UpdateData;
 	//Cnd_FUSUpdateKey);
