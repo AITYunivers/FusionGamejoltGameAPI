@@ -71,6 +71,7 @@ const TCHAR* Extension::Exp_GetResponseStatus()
 
 	std::string status;
 	j["response"]["success"].get_to(status);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(status).c_str());
 }
 
@@ -78,11 +79,15 @@ const TCHAR* Extension::Exp_GetResponseMessage()
 {
 	if (LatestResponse->Type == Unknown || !LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	nlohmann::json j = LatestResponse->GetResponseJson(this);
+
 	if (!j.contains("response") || !j["response"].contains("message"))
 		return Runtime.CopyString(_T(""));
+
 	std::string message;
 	j["response"]["message"].get_to(message);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(message).c_str());
 }
 
@@ -90,6 +95,7 @@ const TCHAR* Extension::Exp_GetErrorMessage()
 {
 	if (LatestResponse->Response)
 		return Runtime.CopyString(_T(""));
+
 	httplib::Error err = LatestResponse->Response.error();
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(httplib::to_string(err)).c_str());
 }
@@ -120,7 +126,6 @@ const TCHAR * Extension::Exp_GetUserToken()
 {
 	return Runtime.CopyString(GameAuthData->UserToken.c_str());
 }
-
 
 const TCHAR * Extension::Exp_GetGuestName()
 {
@@ -493,6 +498,7 @@ const TCHAR* Extension::Exp_FetchedScoreScore(int index)
 
 	std::string scoreStr;
 	score["score"].get_to(scoreStr);
+
 	return Runtime.CopyString(DarkEdif::UTF8ToTString(scoreStr).c_str());
 }
 
@@ -914,7 +920,7 @@ int Extension::Exp_FetchedFriend(int index)
 		return 0;
 	nlohmann::json friend_ = j["response"]["friends"][index];
 
-	if (!friend_.contains("key"))
+	if (!friend_.contains("friend_id"))
 		return 0;
 
 	std::string id;

@@ -298,7 +298,7 @@ REFLAG Extension::Handle()
 			//	LatestResponse.reset();
 
 			std::swap(LatestResponse, TriggerBuffer[0]);
-			TriggerBuffer.clear();
+			TriggerBuffer.pop_front();
 
 			// Error Handling!
 			if (!LatestResponse->Response)

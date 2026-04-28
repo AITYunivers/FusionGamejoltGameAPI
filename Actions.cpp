@@ -659,11 +659,7 @@ void Extension::Act_GlobalFileStorageSaveData(const TCHAR* key, const TCHAR* fil
 
 void Extension::GlobalFileStorageSaveData(const TCHAR* key, const TCHAR* filePath)
 {
-#ifndef __ANDROID__
-	OutputDebugString(_T("I dont wanna code this :D"));
-#endif
-	//LatestResponseType = ResponseType::FetchData;
-	//Cnd_FGSSaveData);
+	// I dont wanna code this :D
 }
 
 void Extension::Act_GlobalFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
