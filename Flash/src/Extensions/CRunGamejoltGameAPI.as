@@ -26,7 +26,7 @@ package Extensions
         public const ExtensionVersion:int = 6;
         public const SDKVersion:int = 20;
 
-		public static const JoltBase:String = "https://api.gamejolt.com"
+		public static const JoltBase:String = "https://api.gamejolt.com";
 		private static const ACT_AUTH:int = 0;
 		private static const ACT_AUTHCREDS:int = 1;
 		private static const ACT_SETGUESTNAME:int = 2;
@@ -174,6 +174,7 @@ package Extensions
         public function CRunGamejoltGameAPI()
         {
             DarkEdif.checkSupportsSDKVersion(SDKVersion);
+			triggerBuffer = new Vector.<CRunGamejoltGameAPIResponseTicket>();
 			
 			try
 			{
@@ -225,27 +226,18 @@ package Extensions
 			return 0;
 	    }
 
-		public override function destroyRunObject(bFlag:Boolean):void
-		{
-			if (loader != null)
-			{
-				loader.removeEventListener(Event.COMPLETE, completeHandler);
-				loader.removeEventListener(flash.events.IOErrorEvent.IO_ERROR, errorHandler);
-			}
-		}
-
-		private function serializeUrl(url:String)
+		private function serializeUrl(url:String):String
 		{
 			return url + "&signature=" + CRunGamejoltGameAPIMD5.hash(JoltBase + url + privateKey);
 		}
 
-		private function httpGet(url:String, responseType:String, trigger:int = null):void
+		private function httpGet(url:String, responseType:String, trigger:int = -1):void
 		{
-			var responseTicket:ResponseTicket = new ResponseTicket(url, responseType);
-			if (trigger != null)
+			var responseTicket:CRunGamejoltGameAPIResponseTicket = new CRunGamejoltGameAPIResponseTicket(url, responseType);
+			if (trigger != -1)
 			{
-				responseTicket.hasTrigger = true;
-				responseTicket.trigger = trigger;
+				responseTicket.HasTrigger = true;
+				responseTicket.Trigger = trigger;
 			}
 
 			var request:URLRequest = new URLRequest(JoltBase + serializeUrl(url));
@@ -256,20 +248,20 @@ package Extensions
 			{
 				try
 				{
-					responseTicket.data = JSON.parse(loader.data);
+					responseTicket.Data = JSON.parse(loader.data);
 				}
 				catch (error:Error)
 				{
-					responseTicket.hasError = true;
-					responseTicket.error = error.message;
+					responseTicket.HasError = true;
+					responseTicket.Error = error.message;
 				}
 				triggerBuffer.push(responseTicket);
 			});
 
 			loader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 			{
-				responseTicket.hasError = true;
-				responseTicket.error = e.text;
+				responseTicket.HasError = true;
+				responseTicket.Error = e.text;
 				triggerBuffer.push(responseTicket);
 			});
 
@@ -293,10 +285,6 @@ package Extensions
 				case ACT_SETGUESTNAME:
 					var actSetGuestNameGuestName:String = act.getParamExpString(rh, 0);
 					actSetGuestName(actSetGuestNameGuestName);
-					break;
-				case ACT_FETCHUSERNAME:
-					var actFetchUsernameUserName:String = act.getParamExpString(rh, 0);
-					actFetchUsername(actFetchUsernameUserName);
 					break;
 				case ACT_FETCHUSERNAME:
 					var actFetchUsernameUserName:String = act.getParamExpString(rh, 0);
@@ -471,7 +459,7 @@ package Extensions
 			}
 	    }
 
-		private function actAuth(userName:String, userToken:String)
+		private function actAuth(userName:String, userToken:String):void
 		{
 			gameAuthData.UserName = userName;
 			gameAuthData.UserToken = userToken;
@@ -488,14 +476,14 @@ package Extensions
 			)
 		}
 
-		private function actAuthCreds()
+		private function actAuthCreds():void
 		{
 			// Not available, possibly in a browser
 			if (!hasFilesystem)
 			{
 				var response:CRunGamejoltGameAPIResponseTicket = new CRunGamejoltGameAPIResponseTicket('', '');
-				response.hasError = true;
-				response.error = "Cannot use 'Authorize user via .gj-credentials' in a browser";
+				response.HasError = true;
+				response.Error = "Cannot use 'Authorize user via .gj-credentials' in a browser";
 				triggerBuffer.push(response);
 				return;
 			}
@@ -512,8 +500,8 @@ package Extensions
 				var lines:Array = contents.split("\n");
 				if (lines.length >= 3)
 				{
-					GameAuthData.UserName = lines[1].replace(/\r/g, "");
-					GameAuthData.UserToken = lines[2].replace(/\r/g, "");
+					gameAuthData.UserName = lines[1].replace(/\r/g, "");
+					gameAuthData.UserToken = lines[2].replace(/\r/g, "");
 				}
 				
 				httpGet(
@@ -530,22 +518,22 @@ package Extensions
 			}
 		}
 
-		private function actSetGameID(gameID:String)
+		private function actSetGameID(gameID:String):void
 		{
 			this.gameID = gameID;
 		}
 
-		private function actSetPrivateKey(privateKey:String)
+		private function actSetPrivateKey(privateKey:String):void
 		{
 			this.privateKey = privateKey;
 		}
 
-		private function actSetGuestName(guestName:String)
+		private function actSetGuestName(guestName:String):void
 		{
 			gameAuthData.GuestName = guestName;
 		}
 
-		private function actFetchUsername(userName:String)
+		private function actFetchUsername(userName:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/users/?game_id=" +
@@ -558,7 +546,7 @@ package Extensions
 			)
 		}
 
-		private function actFetchUserID(userID:int)
+		private function actFetchUserID(userID:int):void
 		{
 			httpGet(
 				"/api/game/v1_2/users/?game_id=" +
@@ -571,7 +559,7 @@ package Extensions
 			)
 		}
 
-		private function actOpenSession()
+		private function actOpenSession():void
 		{
 			httpGet(
 				"/api/game/v1_2/sessions/open/?game_id=" +
@@ -586,7 +574,7 @@ package Extensions
 			)
 		}
 
-		private function actPingSession()
+		private function actPingSession():void
 		{
 			httpGet(
 				"/api/game/v1_2/sessions/ping/?game_id=" +
@@ -601,7 +589,7 @@ package Extensions
 			)
 		}
 
-		private function actPingStatusSession(status:String)
+		private function actPingStatusSession(status:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/sessions/ping/?game_id=" +
@@ -618,7 +606,7 @@ package Extensions
 			)
 		}
 
-		private function actCheckSession()
+		private function actCheckSession():void
 		{
 			httpGet(
 				"/api/game/v1_2/sessions/check/?game_id=" +
@@ -633,7 +621,7 @@ package Extensions
 			)
 		}
 
-		private function actCloseSession()
+		private function actCloseSession():void
 		{
 			httpGet(
 				"/api/game/v1_2/sessions/close/?game_id=" +
@@ -648,7 +636,7 @@ package Extensions
 			)
 		}
 
-		private function actAddUserScore(displayScore:String, sortScore:int, table:int, extraData:String)
+		private function actAddUserScore(displayScore:String, sortScore:int, table:int, extraData:String):void
 		{
 			var url:String =
 				"/api/game/v1_2/scores/add/?game_id=" + 
@@ -673,7 +661,7 @@ package Extensions
 			)
 		}
 
-		private function actAddGuestScore(displayScore:String, sortScore:int, table:int, extraData:String)
+		private function actAddGuestScore(displayScore:String, sortScore:int, table:int, extraData:String):void
 		{
 			var url:String =
 				"/api/game/v1_2/scores/add/?game_id=" + 
@@ -696,7 +684,7 @@ package Extensions
 			)
 		}
 
-		private function actGetScoreRanking(score:int, table:int)
+		private function actGetScoreRanking(score:int, table:int):void
 		{
 			var url:String =
 				"/api/game/v1_2/scores/get-rank/?game_id=" + 
@@ -713,7 +701,7 @@ package Extensions
 			)
 		}
 
-		private function actFetchScores(table:int, limit:int, betterThan:int, worseThan:int)
+		private function actFetchScores(table:int, limit:int, betterThan:int, worseThan:int):void
 		{
 			var url:String = "/api/game/v1_2/scores/?game_id=" + gameID;
 			if (table != -1)
@@ -732,7 +720,7 @@ package Extensions
 			)
 		}
 
-		private function actFetchUserScores(table:int, limit:int, betterThan:int, worseThan:int)
+		private function actFetchUserScores(table:int, limit:int, betterThan:int, worseThan:int):void
 		{
 			var url:String = "/api/game/v1_2/scores/?game_id=" + gameID;
 			if (gameAuthData.UserName.length > 0 && gameAuthData.UserToken.length > 0)
@@ -756,7 +744,7 @@ package Extensions
 			)
 		}
 
-		private function actGetTables()
+		private function actGetTables():void
 		{
 			httpGet(
 				"/api/game/v1_2/scores/tables/?game_id=" +
@@ -767,7 +755,7 @@ package Extensions
 			)
 		}
 
-		private function actGetTrophy(trophy:int)
+		private function actGetTrophy(trophy:int):void
 		{
 			httpGet(
 				"/api/game/v1_2/trophies/?game_id=" +
@@ -784,7 +772,7 @@ package Extensions
 			)
 		}
 
-		private function actGetTrophies()
+		private function actGetTrophies():void
 		{
 			httpGet(
 				"/api/game/v1_2/trophies/?game_id=" +
@@ -799,7 +787,7 @@ package Extensions
 			)
 		}
 
-		private function actGetUnlockedTrophies()
+		private function actGetUnlockedTrophies():void
 		{
 			httpGet(
 				"/api/game/v1_2/trophies/?game_id=" +
@@ -815,7 +803,7 @@ package Extensions
 			)
 		}
 
-		private function actUnlockTrophy(trophy:int)
+		private function actUnlockTrophy(trophy:int):void
 		{
 			httpGet(
 				"/api/game/v1_2/trophies/add-achieved/?game_id=" +
@@ -832,7 +820,7 @@ package Extensions
 			)
 		}
 
-		private function actLockTrophy(trophy:int)
+		private function actLockTrophy(trophy:int):void
 		{
 			httpGet(
 				"/api/game/v1_2/trophies/remove-achieved/?game_id=" +
@@ -849,7 +837,7 @@ package Extensions
 			)
 		}
 
-		private function actGlobalStorageGetData(key:String)
+		private function actGlobalStorageGetData(key:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/?game_id=" +
@@ -862,7 +850,7 @@ package Extensions
 			)
 		}
 
-		private function actGlobalStorageGetKeys(pattern:String)
+		private function actGlobalStorageGetKeys(pattern:String):void
 		{
 			var url:String = "/api/game/v1_2/data-store/get-keys/?game_id=" + gameID;
 			if (pattern.length > 0)
@@ -875,7 +863,7 @@ package Extensions
 			)
 		}
 
-		private function actGlobalStorageDeleteKey(key:String)
+		private function actGlobalStorageDeleteKey(key:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/remove/?game_id=" +
@@ -888,7 +876,7 @@ package Extensions
 			)
 		}
 
-		private function actGlobalStorageSetKey(key:String, data:String)
+		private function actGlobalStorageSetKey(key:String, data:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/set/?game_id=" +
@@ -903,7 +891,7 @@ package Extensions
 			)
 		}
 
-		private function actGlobalStorageUpdateKey(key:String, data:String, operation:String)
+		private function actGlobalStorageUpdateKey(key:String, data:String, operation:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/update/?game_id=" +
@@ -920,7 +908,7 @@ package Extensions
 			)
 		}
 
-		private function actUserStorageGetData(key:String)
+		private function actUserStorageGetData(key:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/?game_id=" +
@@ -937,7 +925,7 @@ package Extensions
 			)
 		}
 
-		private function actUserStorageGetKeys(pattern:String)
+		private function actUserStorageGetKeys(pattern:String):void
 		{
 			var url:String =
 				"/api/game/v1_2/data-store/get-keys/?game_id=" +
@@ -956,7 +944,7 @@ package Extensions
 			)
 		}
 
-		private function actUserStorageDeleteKey(key:String)
+		private function actUserStorageDeleteKey(key:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/remove/?game_id=" +
@@ -973,7 +961,7 @@ package Extensions
 			)
 		}
 
-		private function actUserStorageSetKey(key:String, data:String)
+		private function actUserStorageSetKey(key:String, data:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/set/?game_id=" +
@@ -992,7 +980,7 @@ package Extensions
 			)
 		}
 
-		private function actUserStorageUpdateKey(key:String, data:String, operation:String)
+		private function actUserStorageUpdateKey(key:String, data:String, operation:String):void
 		{
 			httpGet(
 				"/api/game/v1_2/data-store/update/?game_id=" +
@@ -1013,37 +1001,37 @@ package Extensions
 			)
 		}
 
-		private function actGlobalFileStorageSaveData(key:String, filePath:String)
+		private function actGlobalFileStorageSaveData(key:String, filePath:String):void
 		{
 			// No implementation
 		}
 
-		private function actGlobalFileStorageSetKey(key:String, filePath:String)
+		private function actGlobalFileStorageSetKey(key:String, filePath:String):void
 		{
 			// No implementation
 		}
 
-		private function actGlobalFileStorageUpdateKey(key:String, filePath:String, operation:String)
+		private function actGlobalFileStorageUpdateKey(key:String, filePath:String, operation:String):void
 		{
 			// No implementation
 		}
 
-		private function actUserFileStorageSaveData(key:String, filePath:String)
+		private function actUserFileStorageSaveData(key:String, filePath:String):void
 		{
 			// No implementation
 		}
 
-		private function actUserFileStorageSetKey(key:String, filePath:String)
+		private function actUserFileStorageSetKey(key:String, filePath:String):void
 		{
 			// No implementation
 		}
 
-		private function actUserFileStorageUpdateKey(key:String, filePath:String, operation:String)
+		private function actUserFileStorageUpdateKey(key:String, filePath:String, operation:String):void
 		{
 			// No implementation
 		}
 
-		private function actGetFriendsList()
+		private function actGetFriendsList():void
 		{
 			httpGet(
 				"/api/game/v1_2/friends/?game_id=" +
@@ -1058,7 +1046,7 @@ package Extensions
 			)
 		}
 
-		private function actGetCurrentTime()
+		private function actGetCurrentTime():void
 		{
 			httpGet(
 				"/api/game/v1_2/time/?game_id=" +
@@ -1112,7 +1100,7 @@ package Extensions
 				case CND_GETFRIENDSLIST:
 				case CND_GETCURRENTTIME:
 					return cndCallTriggered();
-				case cndAnyCallTriggered:
+				case CND_ANYCALLFINISHED:
 					return cndAnyCallTriggered();
 				case CND_ONERROR:
 					return cndCallTriggered();
@@ -1198,7 +1186,7 @@ package Extensions
 					return new CValue(expFetchedScoreUsername(expFetchedScoreUsernameIndex));
 				case EXP_FETCHEDSCOREUSERID:
 					var expFetchedScoreUserIDIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreUserID());
+					return new CValue(expFetchedScoreUserID(expFetchedScoreUserIDIndex));
 				case EXP_FETCHEDSCOREGUESTNAME:
 					var expFetchedScoreGuestNameIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedScoreGuestName(expFetchedScoreGuestNameIndex));
@@ -1566,7 +1554,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.rank)
+			if (j.response == null || j.response.rank == null)
 				return 0;
 
 			return j.response.rank;
@@ -1578,7 +1566,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array))
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array))
 				return 0;
 
 			return j.response.scores.length;
@@ -1590,7 +1578,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return "";
 			var score:Object = j.response.scores[index];
 			if (score.user == null)
@@ -1605,7 +1593,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return 0;
 			var score:Object = j.response.scores[index];
 			if (score.user_id == null)
@@ -1620,7 +1608,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return "";
 			var score:Object = j.response.scores[index];
 			if (score.guest == null)
@@ -1635,7 +1623,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return "";
 			var score:Object = j.response.scores[index];
 			if (score.score == null)
@@ -1650,7 +1638,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return 0;
 			var score:Object = j.response.scores[index];
 			if (score.sort == null)
@@ -1665,7 +1653,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return "";
 			var score:Object = j.response.scores[index];
 			if (score.extra_data == null)
@@ -1680,7 +1668,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return "";
 			var score:Object = j.response.scores[index];
 			if (score.stored == null)
@@ -1695,7 +1683,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.scores = null || !(j.response.scores is Array) || j.response.scores.length <= index)
+			if (j.response == null || j.response.scores == null || !(j.response.scores is Array) || j.response.scores.length <= index)
 				return 0;
 			var score:Object = j.response.scores[index];
 			if (score.stored_timestamp == null)
@@ -1719,7 +1707,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.tables = null || !(j.response.tables is Array))
+			if (j.response == null || j.response.tables == null || !(j.response.tables is Array))
 				return 0;
 
 			return j.response.tables.length;
@@ -1731,7 +1719,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.tables = null || !(j.response.tables is Array) || j.response.tables.length <= index)
+			if (j.response == null || j.response.tables == null || !(j.response.tables is Array) || j.response.tables.length <= index)
 				return "";
 			var table:Object = j.response.tables[index];
 			if (table.name == null)
@@ -1746,7 +1734,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.tables = null || !(j.response.tables is Array) || j.response.tables.length <= index)
+			if (j.response == null || j.response.tables == null || !(j.response.tables is Array) || j.response.tables.length <= index)
 				return 0;
 			var table:Object = j.response.tables[index];
 			if (table.id == null)
@@ -1761,7 +1749,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.tables = null || !(j.response.tables is Array) || j.response.tables.length <= index)
+			if (j.response == null || j.response.tables == null || !(j.response.tables is Array) || j.response.tables.length <= index)
 				return "";
 			var table:Object = j.response.tables[index];
 			if (table.description == null)
@@ -1776,7 +1764,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.tables = null || !(j.response.tables is Array) || j.response.tables.length <= index)
+			if (j.response == null || j.response.tables == null || !(j.response.tables is Array) || j.response.tables.length <= index)
 				return 0;
 			var table:Object = j.response.tables[index];
 			if (table.primary == null)
@@ -1791,7 +1779,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array))
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array))
 				return 0;
 
 			return j.response.trophies.length;
@@ -1803,7 +1791,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return "";
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.title == null)
@@ -1818,7 +1806,7 @@ package Extensions
 				return 0;
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return 0;
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.id == null)
@@ -1833,7 +1821,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return "";
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.description == null)
@@ -1848,7 +1836,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return "";
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.difficulty == null)
@@ -1863,7 +1851,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return "";
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.image_url == null)
@@ -1878,7 +1866,7 @@ package Extensions
 				return "";
 
 			var j:Object = latestResponse.Data;
-			if (j.response == null || j.response.trophies = null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
+			if (j.response == null || j.response.trophies == null || !(j.response.trophies is Array) || j.response.trophies.length <= index)
 				return "";
 			var trophy:Object = j.response.trophies[index];
 			if (trophy.achieved == null)
