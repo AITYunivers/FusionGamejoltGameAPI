@@ -797,9 +797,10 @@ function CRunGamejoltGameAPI() {
 	this.Act_AuthCreds = function ()
 	{
 		// Not applicable for this runtime
-		this.latestResponse = new ResponseTicket('', '');
-		this.latestResponse.hasError = true;
-		this.latestResponse.error = "Cannot use 'Authorize user via .gj-credentials' on HTML5";
+		var response = new ResponseTicket('', '');
+		response.hasError = true;
+		response.error = "Cannot use 'Authorize user via .gj-credentials' on HTML5";
+		this.triggerBuffer.push(response);
 	};
 
 	this.Act_SetGameID = function (gameID)
