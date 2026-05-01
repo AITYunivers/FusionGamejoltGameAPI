@@ -1,4 +1,4 @@
-package Extensions;
+
 
 import GamejoltGameAPI.MinimalJson.JsonObject;
 
@@ -20,5 +20,13 @@ public class ResponseTicket {
     {
         URL = url;
         Type = type;
+    }
+
+    public static ResponseTicket MakeError(String error, String type)
+    {
+        final ResponseTicket responseTicket = new ResponseTicket("N/A: Errored before URL could be requested", type);
+        responseTicket.HasError = true;
+        responseTicket.Error = error;
+        return responseTicket;
     }
 }

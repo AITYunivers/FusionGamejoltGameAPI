@@ -209,7 +209,11 @@ public class DarkEdifProperties {
                     throw new RuntimeException("Couldn't find property of JSON ID " + jsonIdx + ", hit property " + i + " of " + numProps + " stored.\n");
                 }
 
-                char propDataIdentifier = (char)data.propData.get(0);
+                char propDataIdentifier = 0;
+                if (data.propData.remaining() > 0)
+                {
+                    propDataIdentifier = (char)data.propData.get(0);
+                }
                 if (IsComboBoxProp((int)data.propTypeID) && propDataIdentifier == 'S')
                 {
                     DarkEdifPropSet rs = RuntimePropSet(data);
@@ -321,7 +325,11 @@ public class DarkEdifProperties {
             // Prop ver 2 added repeating prop sets
             if (propVer == 2 && IsComboBoxProp((int)prop.propTypeID))
             {
-                char setIndicator = (char)prop.propData.get(0);
+                char setIndicator = 0;
+                if (prop.propData.remaining() > 0)
+                {
+                    setIndicator = (char)prop.propData.get(0);
+                }
                 if (setIndicator == 'L')
                 {
                     prop.propData.position(1);

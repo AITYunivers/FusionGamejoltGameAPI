@@ -22,7 +22,10 @@ public class DarkEdifPropSet {
     public DarkEdifPropSet(ByteBuffer rsDV)
     {
         // Always 'S', compared with 'L' for non-set list.
-        setIndicator = String.valueOf((char)(rsDV.get() & 0xFF));
+        if (rsDV.remaining() > 0)
+        {
+            setIndicator = String.valueOf((char)(rsDV.get() & 0xFF));
+        }
         // Number of repeats of this set, 1 is minimum and means one of this set
         numRepeats = rsDV.getShort() & 0xFFFF;
         // Property that ends this set's data, as a JSON index, inclusive

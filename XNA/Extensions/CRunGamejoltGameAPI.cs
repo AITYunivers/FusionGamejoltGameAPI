@@ -1473,10 +1473,10 @@ namespace RuntimeXNA.Extensions
                 return 0;
 
             SimpleJson.JsonObject user = (SimpleJson.JsonObject)users[index];
-            if (!user.ContainsKey("username"))
+            if (!user.ContainsKey("id"))
                 return 0;
 
-            return int.Parse((string)user["username"]); 
+            return int.Parse((string)user["id"]); 
         }
 
         private string expFetchedUserDescription(int index)
@@ -2583,7 +2583,6 @@ namespace RuntimeXNA.Extensions
                 {
                     verStr += ((char)verBuff[i]).ToString();
                 }
-                int propVer;
                 if (verStr == "DAR2")
                 {
                     propVer = 2;
@@ -2605,10 +2604,10 @@ namespace RuntimeXNA.Extensions
 
                 BinaryReader editData = new BinaryReader(new MemoryStream(edPtrFile.readArray(
                     (int)sizeBytes -
-                    // skip area between eHeader -> Props
-                    (ext.ho.privateData - 20) -
-                    // DarkEdif seemingly messes up compiling to XNA, weird (- Yunivers)
-                    24 -
+                    // skip eHeader
+                    ext.ho.privateData -
+                    // cursor offset
+                    4 -
                     // Skip DarkEdif header
                     (int)header.BaseStream.Length
                 )));
@@ -2637,6 +2636,7 @@ namespace RuntimeXNA.Extensions
 				        propJSONIndex = data.ReadUInt16();
                     }
                     int propNameLength = data.ReadByte();
+
                     string propName = Encoding.UTF8.GetString(data.ReadBytes(propNameLength));
                     BinaryReader propData = new BinaryReader(new MemoryStream(data.ReadBytes((int)(propEnd - data.BaseStream.Position))));
 
