@@ -653,152 +653,62 @@ void Extension::UserStorageUpdateKey(const TCHAR* key, const TCHAR* data, const 
 
 void Extension::Act_GlobalFileStorageSaveData(const TCHAR* key, const TCHAR* filePath)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->GlobalFileStorageSaveData(key, filePath); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::GlobalFileStorageSaveData(const TCHAR* key, const TCHAR* filePath)
 {
-	// I dont wanna code this :D
+
 }
 
 void Extension::Act_GlobalFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->GlobalFileStorageSetKey(key, filePath); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::GlobalFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 {
-	std::tstring filePathStr = filePath;
-	std::ifstream file(filePathStr, std::ifstream::ate | std::ifstream::binary);
-	if (!file.is_open()) {
-		std::cerr << "Unable to open file: " << filePathStr.c_str() << std::endl;
-#ifndef __ANDROID__
-		//OutputDebugString(("Unable to open file: " + filePathStr).c_str());
-#endif
-		return;
-	}
-	file.tellg();
-	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	file.close();
-	content = content;
-	if (content.length() > 500000)
-	{
-#ifndef __ANDROID__
-		//OutputDebugString(("File size too large! Max: 500kb, Input: " + std::to_string(content.length())).c_str());
-#endif
-		return;
-	}
-	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&key=") + key + _T("&data=") + content;
-	//HttpGet(url);
-	//LatestResponseType = ResponseType::SetData;
-	//Cnd_FGSSetKey);
+
 }
 
 void Extension::Act_GlobalFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath, const TCHAR* operation)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->GlobalFileStorageUpdateKey(key, filePath, operation); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::GlobalFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath, const TCHAR* operation)
 {
-	std::ifstream file(filePath, std::ifstream::ate | std::ifstream::binary);
-	if (!file.is_open()) {
-		std::cerr << "Unable to open file: " << filePath << std::endl;
-		return;
-	}
-	file.tellg();
-	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	file.close();
-	content = content;
-	if (content.length() > 500000)
-	{
-#ifndef __ANDROID__
-		//OutputDebugString(("File size too large! Max: 500kb, Input: " + std::to_string(content.length())).c_str());
-#endif
-		return;
-	}
-	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&key=") + key + _T("&operation=") + operation + _T("&data=") + content;
-	//HttpGet(url);
-	//LatestResponseType = ResponseType::UpdateData;
-	//Cnd_FGSUpdateKey);
+
 }
 
 void Extension::Act_UserFileStorageSaveData(const TCHAR* key, const TCHAR* filePath)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->UserFileStorageSaveData(key, filePath); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::UserFileStorageSaveData(const TCHAR* key, const TCHAR* filePath)
 {
-#ifndef __ANDROID__
-	OutputDebugString(_T("I dont wanna code this :D"));
-#endif
-	//LatestResponseType = ResponseType::FetchData;
-	//Cnd_FUSSaveData);
+
 }
 
 void Extension::Act_UserFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->UserFileStorageSetKey(key, filePath); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::UserFileStorageSetKey(const TCHAR* key, const TCHAR* filePath)
 {
-	std::ifstream file(filePath, std::ifstream::ate | std::ifstream::binary);
-	if (!file.is_open()) {
-		std::cerr << "Unable to open file: " << filePath << std::endl;
-		return;
-	}
-	file.tellg();
-	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	file.close();
-	content = content;
-	if (content.length() > 500000)
-	{
-#ifndef __ANDROID__
-		//OutputDebugString((_T("File size too large! Max: 500kb, Input: ") + std::to_string(content.length())).c_str());
-#endif
-		return;
-	}
-	std::tstring url = _T("/api/game/v1_2/data-store/set/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") + key + _T("&data=") + content;
-	//HttpGet(url);
-	//LatestResponseType = ResponseType::SetData;
-	//Cnd_FUSSetKey);
+
 }
 
 void Extension::Act_UserFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath, const TCHAR* operation)
 {
-	std::unique_ptr<std::thread> t = std::make_unique<std::thread>([=]() { this->UserFileStorageUpdateKey(key, filePath, operation); });
-	Threads.push_back(std::move(t));
+
 }
 
 void Extension::UserFileStorageUpdateKey(const TCHAR* key, const TCHAR* filePath, const TCHAR* operation)
 {
-	std::ifstream file(filePath, std::ifstream::ate | std::ifstream::binary);
-	if (!file.is_open()) {
-		std::cerr << "Unable to open file: " << filePath << std::endl;
-		return;
-	}
-	file.tellg();
-	std::tstring content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	file.close();
-	content = content;
-	if (content.length() > 500000)
-	{
-#ifndef __ANDROID__
-		//OutputDebugString(("File size too large! Max: 500kb, Input: " + std::to_string(content.length())).c_str());
-#endif
-		return;
-	}
-	std::tstring url = _T("/api/game/v1_2/data-store/update/?game_id=") + GameID + _T("&username=") + GameAuthData->UserName + _T("&user_token=") + GameAuthData->UserToken + _T("&key=") + key + _T("&operation=") + operation + _T("&data=") + content;
-	//HttpGet(url);
-	//LatestResponseType = ResponseType::UpdateData;
-	//Cnd_FUSUpdateKey);
+
 }
 
 void Extension::Act_GetFriendsList()
