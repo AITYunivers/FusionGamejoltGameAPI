@@ -57,7 +57,7 @@ public:
 	~Extension();
 
 #pragma region JoltData
-	std::tstring JoltBase = _T("http:\x2F\x2F" "api.gamejolt.com"s);
+	std::tstring JoltBase = _T("http:/" "/api.gamejolt.com"s);
 	std::tstring GameID = _T("");
 	std::tstring PrivateKey = _T("");
 	GameAuth* GameAuthData;
