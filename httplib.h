@@ -10428,7 +10428,9 @@ namespace httplib {
 		inline socket_t SocketStream::socket() const { return sock_; }
 
 		inline time_t SocketStream::duration() const {
+#if !defined(__ANDROID__) && !defined(__FUSION_IOS__)
 			static_assert(sizeof(time_t) == 8, "32-bit time_t");
+#endif
 			return std::chrono::duration_cast<std::chrono::milliseconds>(
 				std::chrono::steady_clock::now() - start_time_)
 				.count();

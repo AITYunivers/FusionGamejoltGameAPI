@@ -53,8 +53,9 @@
   </ImportGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-	  <!-- this is inverted, turning it off turns thread safe statics on -->
+      <!-- this is inverted, turning it off turns thread safe statics on -->
       <ThreadSafeStatics>false</ThreadSafeStatics>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Runtime|x86'">__FUSION_IOS__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
