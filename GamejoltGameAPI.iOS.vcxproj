@@ -51,6 +51,12 @@
   <ImportGroup Label="Shared">
     <Import Project="GamejoltGameAPI.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <!-- this is inverted, turning it off turns thread safe statics on -->
+      <ThreadSafeStatics>false</ThreadSafeStatics>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\iOS\MMF2Lib\Array.h" />
     <ClInclude Include="..\Inc\iOS\MMF2Lib\CBitmap.h" />
