@@ -23,7 +23,7 @@ package Extensions
 
 	public class CRunGamejoltGameAPI extends CRunExtension
 	{
-        public const ExtensionVersion:int = 6;
+        public const ExtensionVersion:int = 7;
         public const SDKVersion:int = 20;
 
 		public static const JoltBase:String = "https://api.gamejolt.com";

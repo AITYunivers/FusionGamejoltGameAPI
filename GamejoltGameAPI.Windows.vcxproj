@@ -27,7 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4cc76326-c0bc-4e01-805e-ea21a9967a26}</ProjectGuid>
+    <ProjectGuid>{37cf2044-5fd9-47ec-bba5-e5f78fdaa0a8}</ProjectGuid>
     <ProjectName>GamejoltGameAPI.Windows</ProjectName>
     <TargetName>GamejoltGameAPI</TargetName>
   </PropertyGroup>
@@ -67,44 +67,13 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Unicode|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>FUSION_INTERNAL_ACCESS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Edittime Unicode|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\OpenSSL-Win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\OpenSSL-Win32\lib\VC\x86\TD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Edittime Unicode|Win32'">
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files (x86)\OpenSSL-Win32\lib\VC\x86\MD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\OpenSSL-Win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Edittime|Win32'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|Win32'">
-    <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-    <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Lib\Windows\Edif.Edittime.cpp" />
@@ -112,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\Windows\Props.hpp" />
+    <ClInclude Include="..\Inc\Windows\WindowsSurface.hpp" />
     <ClInclude Include="..\Inc\Windows\WindowsDefines.hpp" />
     <ClInclude Include="DarkExt.json">
       <FileType>Document</FileType>

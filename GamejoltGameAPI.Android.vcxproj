@@ -34,34 +34,36 @@
       <Platform>x86</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Inc\Android\MMFAndroidMasterHeader.hpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{710e343b-0b45-4ea5-ae98-e8c9afd850a2}</ProjectGuid>
+    <ProjectGuid>{9f3e0a23-56c1-4791-8e32-1b7bf378b200}</ProjectGuid>
     <Keyword>Android</Keyword>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <ApplicationType>Android</ApplicationType>    
-    <AndroidAPILevel>android-31</AndroidAPILevel>
-    <AndroidAPILevelNumber>31</AndroidAPILevelNumber>
+    <ApplicationType>Android</ApplicationType>
     <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
     <ProjectName>GamejoltGameAPI.Android</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Runtime|ARM'">
+    <AndroidAPILevel>android-31</AndroidAPILevel>
+  </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Runtime|x86'">
-    <PlatformToolset>Clang_5_0</PlatformToolset>
+    <AndroidAPILevel>android-31</AndroidAPILevel>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup>
-    <AndroidAPILevel>android-31</AndroidAPILevel>
-    <AndroidAPILevelNumber>31</AndroidAPILevelNumber>
-  </PropertyGroup>
   <Import Project="$(ProjectDir)\..\Lib\FusionSDK.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
     <Import Project="GamejoltGameAPI.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|x86'">
+    <ClCompile>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Inc\Android\MMFAndroidMasterHeader.hpp" />
+  </ItemGroup>
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

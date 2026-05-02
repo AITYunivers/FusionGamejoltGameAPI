@@ -1,4 +1,4 @@
-﻿/*
+/*
 	This GamejoltGameAPI Fusion extension UWP port is under MIT license.
 */
 
@@ -494,7 +494,7 @@ function CRunGamejoltGameAPI() {
 
 	// DarkEdif SDK exts should have these four variables defined.
 	// We need this[] and window[] instead of direct because HTML5 Final Project minifies and breaks the names otherwise
-	this['ExtensionVersion'] = 6; // To match C++ version
+	this['ExtensionVersion'] = 7; // To match C++ version
 	this['SDKVersion'] = 20; // To match C++ version
 	this['DebugMode'] = true;
 	this['ExtensionName'] = 'GamejoltGameAPI';

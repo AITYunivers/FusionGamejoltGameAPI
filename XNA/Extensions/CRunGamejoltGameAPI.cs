@@ -46,7 +46,7 @@ namespace RuntimeXNA.Extensions
 {
     class CRunGamejoltGameAPI : CRunExtension
     {
-        public const int ExtensionVersion = 6;
+        public const int ExtensionVersion = 7;
         public const int SDKVersion = 20;
         
 		public const string JoltBase = "https://api.gamejolt.com";
@@ -2705,7 +2705,9 @@ namespace RuntimeXNA.Extensions
 
                         long oldPos = data.propData.BaseStream.Position;
                         data.propData.BaseStream.Position = 0;
-                        char propDataIdentifier = (char)data.propData.ReadByte();
+                        char propDataIdentifier = '\0';
+                        if (data.propData.BaseStream.Length > 0)
+                            propDataIdentifier = (char)data.propData.ReadByte();
                         data.propData.BaseStream.Position = oldPos;
                         if (IsComboBoxProp((int)data.propTypeID) && propDataIdentifier == 'S')
                         {
@@ -2818,8 +2820,10 @@ namespace RuntimeXNA.Extensions
                     {
                         long oldPos = prop.propData.BaseStream.Position;
                         prop.propData.BaseStream.Position = 0;
-                        char setIndicator = (char)prop.propData.ReadByte();
-                        prop.propData.BaseStream.Position = oldPos;
+						char setIndicator = '\0';
+						if (prop.propData.BaseStream.Length > 0)
+							setIndicator = (char)prop.propData.ReadByte();
+						prop.propData.BaseStream.Position = oldPos;
                         if (setIndicator == 'L')
                         {
                             prop.propData.BaseStream.Position = 1;

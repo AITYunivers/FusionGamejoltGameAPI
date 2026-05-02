@@ -1,6 +1,6 @@
 #pragma once
 #include "DarkEdif.hpp"
-#ifndef __ANDROID__
+#ifdef _WIN32
 #include <windows.h>
 #include <tchar.h>
 #endif
@@ -38,11 +38,11 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 254;
-	static const int Version = 6;
+	static const int Version = 7;
 
 	// If you change OEFLAGS, make sure you modify RUNDATA so the data is available, or you'll get crashes!
 	// For example, OEFLAGS::VALUES makes use of the AltVals rv struct.
-	static const OEFLAGS OEFLAGS = OEFLAGS::NONE;
+	static const OEFLAGS OEFLAGS = OEFLAGS::VALUES;
 	static const OEPREFS OEPREFS = OEPREFS::NONE;
 
 	static const int WindowProcPriority = 100;

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class CRunGamejoltGameAPI extends CRunExtension
 {
-    public static final int ExtensionVersion = 6;
+    public static final int ExtensionVersion = 7;
     public static final int SDKVersion = 20;
 
     public static final String JoltBase = "http://api.gamejolt.com";

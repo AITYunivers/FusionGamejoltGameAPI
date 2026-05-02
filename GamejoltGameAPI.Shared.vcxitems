@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <ItemsProjectGuid>{a88b9b57-7ead-496b-916e-271015e44bbc}</ItemsProjectGuid>
+    <ItemsProjectGuid>{a1728e84-89b7-4074-a74c-8e0a35891dcc}</ItemsProjectGuid>
     <ItemsProjectName>GamejoltGameAPI.Shared</ItemsProjectName>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -22,9 +22,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Inc\Shared\json.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Inc\Shared\NonWindowsDefines.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Inc\Shared\ObjectSelection.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Inc\Shared\SurfaceMultiPlat.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Common.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Extension.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)GameAuth.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)httplib.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)md5.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\json.hpp" />

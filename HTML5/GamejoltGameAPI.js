@@ -1,4 +1,4 @@
-﻿/*
+/*
 	This GamejoltGameAPI Fusion extension HTML5 port is under MIT license.
 
 	Modification for purposes of tuning to your own HTML5 application is permitted, but must retain this notice and not be redistributed,
@@ -488,7 +488,7 @@ function CRunGamejoltGameAPI() {
 
 	// DarkEdif SDK exts should have these four variables defined.
 	// We need this[] and globalThis[] instead of direct because HTML5 Final Project minifies and breaks the names otherwise
-	this['ExtensionVersion'] = 6; // To match C++ version
+	this['ExtensionVersion'] = 7; // To match C++ version
 	this['SDKVersion'] = 20; // To match C++ version
 	this['DebugMode'] = true;
 	this['ExtensionName'] = 'GamejoltGameAPI';
