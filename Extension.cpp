@@ -236,9 +236,9 @@ std::tstring Extension::URLDecode(std::tstring str) {
 #endif
 	std::tstring ret = _T("");
 	TCHAR ch;
-	int i, ii, len = str.length();
+	int i, ii, len = (int)str.length();
 
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; ++i) {
 		if (str[i] != _T('%'))
 		{
 			if (str[i] == _T('+'))

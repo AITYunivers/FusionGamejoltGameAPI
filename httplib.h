@@ -5703,6 +5703,8 @@ namespace httplib {
 		inline int shutdown_socket(socket_t sock) {
 #ifdef _WIN32
 			return shutdown(sock, SD_BOTH);
+#elif defined(__cplusplus)
+			return ::shutdown(sock, SHUT_RDWR);
 #else
 			return shutdown(sock, SHUT_RDWR);
 #endif
@@ -10426,6 +10428,7 @@ namespace httplib {
 		inline socket_t SocketStream::socket() const { return sock_; }
 
 		inline time_t SocketStream::duration() const {
+			static_assert(sizeof(time_t) == 8, "32-bit time_t");
 			return std::chrono::duration_cast<std::chrono::milliseconds>(
 				std::chrono::steady_clock::now() - start_time_)
 				.count();

@@ -144,7 +144,7 @@ int Extension::Exp_FetchedUserCount()
 	if (!j.contains("response") || !j["response"].contains("users") || !j["response"]["users"].is_array())
 		return 0;
 
-	return j["response"]["users"].size();
+	return (int)j["response"]["users"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedUserDisplayName(int index)
@@ -418,7 +418,7 @@ int Extension::Exp_FetchedScoreCount()
 	if (!j.contains("response") || !j["response"].contains("scores") || !j["response"]["scores"].is_array())
 		return 0;
 
-	return j["response"]["scores"].size();
+	return (int)j["response"]["scores"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedScoreUsername(int index)
@@ -607,7 +607,7 @@ int Extension::Exp_FetchedTableCount()
 	if (!j.contains("response") || !j["response"].contains("tables") || !j["response"]["tables"].is_array())
 		return 0;
 
-	return j["response"]["tables"].size();
+	return (int)j["response"]["tables"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedTableName(int index)
@@ -702,7 +702,7 @@ int Extension::Exp_FetchedTrophyCount()
 	if (!j.contains("response") || !j["response"].contains("trophies") || !j["response"]["trophies"].is_array())
 		return 0;
 
-	return j["response"]["trophies"].size();
+	return (int)j["response"]["trophies"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedTrophyTitle(int index)
@@ -854,7 +854,7 @@ int Extension::Exp_FetchedKeyCount()
 	if (!j.contains("response") || !j["response"].contains("keys") || !j["response"]["keys"].is_array())
 		return 0;
 
-	return j["response"]["keys"].size();
+	return (int)j["response"]["keys"].size();
 }
 
 const TCHAR* Extension::Exp_FetchedKey(int index)
@@ -907,7 +907,7 @@ int Extension::Exp_FetchedFriendCount()
 	if (!j.contains("response") || !j["response"].contains("friends") || !j["response"]["friends"].is_array())
 		return 0;
 
-	return j["response"]["friends"].size();
+	return (int)j["response"]["friends"].size();
 }
 
 int Extension::Exp_FetchedFriend(int index)
