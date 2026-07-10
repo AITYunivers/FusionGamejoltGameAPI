@@ -171,6 +171,13 @@ package Extensions
 		private var triggerBuffer:Vector.<CRunGamejoltGameAPIResponseTicket> = null;
 		private var latestResponse:CRunGamejoltGameAPIResponseTicket = null;
 
+		private function MakeStringValue(s:String):CValue
+		{
+			var v:CValue = new CValue(0);
+			v.forceString(s);
+			return v;
+		}
+
         public function CRunGamejoltGameAPI()
         {
             DarkEdif.checkSupportsSDKVersion(SDKVersion);
@@ -195,7 +202,8 @@ package Extensions
             var props:DarkEdifProperties = DarkEdif.getProperties(this, file, version);
             gameID = props.GetPropertyStr(0);
 		    privateKey = props.GetPropertyStr(1);
-		    gameAuthData = DarkEdif.getGlobalData("AuthInfo");
+		    //gameAuthData = DarkEdif.getGlobalData("AuthInfo");
+			gameAuthData = CRunGamejoltGameAPIGameAuth(DarkEdif.getGlobalData("AuthInfo"));
             if (gameAuthData == null)
             {
                 gameAuthData = new CRunGamejoltGameAPIGameAuth("", "", "");
@@ -1125,55 +1133,55 @@ package Extensions
 			switch (num)
 			{
 				case EXP_GETJSONRESPONSE:
-					return new CValue(expGetJsonResponse());
+					return MakeStringValue(expGetJsonResponse());
 				case EXP_GETRESPONSETYPE:
-					return new CValue(expGetResponseType());
+					return MakeStringValue(expGetResponseType());
 				case EXP_GETRESPONSESTATUS:
-					return new CValue(expGetResponseStatus());
+					return MakeStringValue(expGetResponseStatus());
 				case EXP_GETRESPONSEMESSAGE:
-					return new CValue(expGetResponseMessage());
+					return MakeStringValue(expGetResponseMessage());
 				case EXP_GETUSERNAME:
-					return new CValue(expGetUserName());
+					return MakeStringValue(expGetUserName());
 				case EXP_GETUSERTOKEN:
-					return new CValue(expGetUserToken());
+					return MakeStringValue(expGetUserToken());
 				case EXP_GETGUESTNAME:
-					return new CValue(expGetGuestName());
+					return MakeStringValue(expGetGuestName());
 				case EXP_FETCHEDUSERCOUNT:
 					return new CValue(expFetchedUserCount());
 				case EXP_FETCHEDUSERDISPLAYNAME:
 					var expFetchedUserDisplayNameIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserDisplayName(expFetchedUserDisplayNameIndex));
+					return MakeStringValue(expFetchedUserDisplayName(expFetchedUserDisplayNameIndex));
 				case EXP_FETCHEDUSERNAME:
 					var expFetchedUsernameIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUsername(expFetchedUsernameIndex));
+					return MakeStringValue(expFetchedUsername(expFetchedUsernameIndex));
 				case EXP_FETCHEDUSERID:
 					var expFetchedUserIDIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedUserID(expFetchedUserIDIndex));
 				case EXP_FETCHEDUSERDESCRIPTION:
 					var expFetchedUserDescriptionIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserDescription(expFetchedUserDescriptionIndex));
+					return MakeStringValue(expFetchedUserDescription(expFetchedUserDescriptionIndex));
 				case EXP_FETCHEDUSERAVATAR:
 					var expFetchedUserAvatarIndex:int = ho.getExpParam().getInt();
 					var expFetchedUserAvatarResolution:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserAvatar(expFetchedUserAvatarIndex, expFetchedUserAvatarResolution));
+					return MakeStringValue(expFetchedUserAvatar(expFetchedUserAvatarIndex, expFetchedUserAvatarResolution));
 				case EXP_FETCHEDUSERWEBSITE:
 					var expFetchedUserWebsiteIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserWebsite(expFetchedUserWebsiteIndex));
+					return MakeStringValue(expFetchedUserWebsite(expFetchedUserWebsiteIndex));
 				case EXP_FETCHEDUSERSTATUS:
 					var expFetchedUserStatusIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserStatus(expFetchedUserStatusIndex));
+					return MakeStringValue(expFetchedUserStatus(expFetchedUserStatusIndex));
 				case EXP_FETCHEDUSERTYPE:
 					var expFetchedUserTypeIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserType(expFetchedUserTypeIndex));
+					return MakeStringValue(expFetchedUserType(expFetchedUserTypeIndex));
 				case EXP_FETCHEDUSERLASTLOGGEDIN:
 					var expFetchedUserLastLoggedInIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserLastLoggedIn(expFetchedUserLastLoggedInIndex));
+					return MakeStringValue(expFetchedUserLastLoggedIn(expFetchedUserLastLoggedInIndex));
 				case EXP_FETCHEDUSERLASTLOGGEDINTIMESTAMP:
 					var expFetchedUserLastLoggedInTimestampIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedUserLastLoggedInTimestamp(expFetchedUserLastLoggedInTimestampIndex));
 				case EXP_FETCHEDUSERSIGNEDUP:
 					var expFetchedUserSignedUpIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedUserSignedUp(expFetchedUserSignedUpIndex));
+					return MakeStringValue(expFetchedUserSignedUp(expFetchedUserSignedUpIndex));
 				case EXP_FETCHEDUSERSIGNEDUPTIMESTAMP:
 					var expFetchedUserSignedUpTimestampIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedUserSignedUpTimestamp(expFetchedUserSignedUpTimestampIndex));
@@ -1183,25 +1191,25 @@ package Extensions
 					return new CValue(expFetchedScoreCount());
 				case EXP_FETCHEDSCOREUSERNAME:
 					var expFetchedScoreUsernameIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreUsername(expFetchedScoreUsernameIndex));
+					return MakeStringValue(expFetchedScoreUsername(expFetchedScoreUsernameIndex));
 				case EXP_FETCHEDSCOREUSERID:
 					var expFetchedScoreUserIDIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedScoreUserID(expFetchedScoreUserIDIndex));
 				case EXP_FETCHEDSCOREGUESTNAME:
 					var expFetchedScoreGuestNameIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreGuestName(expFetchedScoreGuestNameIndex));
+					return MakeStringValue(expFetchedScoreGuestName(expFetchedScoreGuestNameIndex));
 				case EXP_FETCHEDSCORESCORE:
 					var expFetchedScoreScoreIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreScore(expFetchedScoreScoreIndex));
+					return MakeStringValue(expFetchedScoreScore(expFetchedScoreScoreIndex));
 				case EXP_FETCHEDSCORESORT:
 					var expFetchedScoreSortIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedScoreSort(expFetchedScoreSortIndex));
 				case EXP_FETCHEDSCOREEXTRADATA:
 					var expFetchedScoreExtraDataIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreExtraData(expFetchedScoreExtraDataIndex));
+					return MakeStringValue(expFetchedScoreExtraData(expFetchedScoreExtraDataIndex));
 				case EXP_FETCHEDSCORESUBMIT:
 					var expFetchedScoreSubmitIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedScoreSubmit(expFetchedScoreSubmitIndex));
+					return MakeStringValue(expFetchedScoreSubmit(expFetchedScoreSubmitIndex));
 				case EXP_FETCHEDSCORESUBMITTIMESTAMP:
 					var expFetchedScoreSubmitTimestampIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedScoreSubmitTimestamp(expFetchedScoreSubmitTimestampIndex));
@@ -1209,13 +1217,13 @@ package Extensions
 					return new CValue(expFetchedTableCount());
 				case EXP_FETCHEDTABLENAME:
 					var expFetchedTableNameIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTableName(expFetchedTableNameIndex));
+					return MakeStringValue(expFetchedTableName(expFetchedTableNameIndex));
 				case EXP_FETCHEDTABLEID:
 					var expFetchedTableIDIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedTableID(expFetchedTableIDIndex));
 				case EXP_FETCHEDTABLEDESCRIPTION:
 					var expFetchedTableDescriptionIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTableDescription(expFetchedTableDescriptionIndex));
+					return MakeStringValue(expFetchedTableDescription(expFetchedTableDescriptionIndex));
 				case EXP_FETCHEDTABLEISPRIMARY:
 					var expFetchedTableIsPrimaryIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedTableIsPrimary(expFetchedTableIsPrimaryIndex));
@@ -1223,31 +1231,31 @@ package Extensions
 					return new CValue(expFetchedTrophyCount());
 				case EXP_FETCHEDTROPHYTITLE:
 					var expFetchedTrophyTitleIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTrophyTitle(expFetchedTrophyTitleIndex));
+					return MakeStringValue(expFetchedTrophyTitle(expFetchedTrophyTitleIndex));
 				case EXP_FETCHEDTROPHYID:
 					var expFetchedTrophyIDIndex:int = ho.getExpParam().getInt();
 					return new CValue(expFetchedTrophyID(expFetchedTrophyIDIndex));
 				case EXP_FETCHEDTROPHYDESCRIPTION:
 					var expFetchedTrophyDescriptionIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTrophyDescription(expFetchedTrophyDescriptionIndex));
+					return MakeStringValue(expFetchedTrophyDescription(expFetchedTrophyDescriptionIndex));
 				case EXP_FETCHEDTROPHYDIFFICULTY:
 					var expFetchedTrophyDifficultyIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTrophyDifficulty(expFetchedTrophyDifficultyIndex));
+					return MakeStringValue(expFetchedTrophyDifficulty(expFetchedTrophyDifficultyIndex));
 				case EXP_FETCHEDTROPHYIMAGEURL:
 					var expFetchedTrophyImageURLIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTrophyImageURL(expFetchedTrophyImageURLIndex));
+					return MakeStringValue(expFetchedTrophyImageURL(expFetchedTrophyImageURLIndex));
 				case EXP_FETCHEDTROPHYACHIEVED:
 					var expFetchedTrophyAchievedIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedTrophyAchieved(expFetchedTrophyAchievedIndex));
+					return MakeStringValue(expFetchedTrophyAchieved(expFetchedTrophyAchievedIndex));
 				case EXP_RETRIEVEDKEYDATA:
-					return new CValue(expRetrievedKeyData());
+					return MakeStringValue(expRetrievedKeyData());
 				case EXP_FETCHEDKEYCOUNT:
 					return new CValue(expFetchedKeyCount());
 				case EXP_FETCHEDKEY:
 					var expFetchedKeyIndex:int = ho.getExpParam().getInt();
-					return new CValue(expFetchedKey(expFetchedKeyIndex));
+					return MakeStringValue(expFetchedKey(expFetchedKeyIndex));
 				case EXP_UPDATEDKEYDATA:
-					return new CValue(expUpdatedKeyData());
+					return MakeStringValue(expUpdatedKeyData());
 				case EXP_FETCHEDFRIENDCOUNT:
 					return new CValue(expFetchedFriendCount());
 				case EXP_FETCHEDFRIEND:
@@ -1268,17 +1276,17 @@ package Extensions
 				case EXP_TIMETIMESTAMP:
 					return new CValue(expTimeTimestamp());
 				case EXP_TIMETIMEZONE:
-					return new CValue(expTimeTimezone());
+					return MakeStringValue(expTimeTimezone());
 				case EXP_GETGAMEID:
-					return new CValue(expGetGameID());
+					return MakeStringValue(expGetGameID());
 				case EXP_GETPRIVATEKEY:
-					return new CValue(expGetPrivateKey());
+					return MakeStringValue(expGetPrivateKey());
 				case EXP_GETREQUESTURL:
-					return new CValue(expGetRequestURL());
+					return MakeStringValue(expGetRequestURL());
 				case EXP_FETCHEDSCORETABLEID:
 					return new CValue(expFetchedScoreTableID());
 				case EXP_GETERRORMESSAGE:
-					return new CValue(expGetErrorMessage());
+					return MakeStringValue(expGetErrorMessage());
 			}
 	    	return null;
 	    }
