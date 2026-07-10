@@ -13,6 +13,7 @@ package Extensions.DarkEdif
 	import Services.*;
 	import Extensions.*;
     import flash.utils.ByteArray;
+    import flash.utils.Endian;
     import flash.geom.Point;
 
     public class DarkEdifProperties
@@ -51,7 +52,7 @@ package Extensions.DarkEdif
             {
                 verStr += String.fromCharCode(verBuff[i]);
             }
-            var propVer:int;
+            //var propVer:int;
             if (verStr == 'DAR2')
             {
                 propVer = 2;
@@ -183,7 +184,8 @@ package Extensions.DarkEdif
                             {
                                 data = props[i++];
                             }
-                            rs = rsContainer = null;
+                            rs = null;
+                            rsContainer = null;
                         }
                         // It's within this set's range
                         else if (jsonIdx >= rs.firstSetJSONPropIndex && jsonIdx <= rs.lastSetJSONPropIndex)
@@ -216,7 +218,8 @@ package Extensions.DarkEdif
 						// else it's not in this set: continue to standard loop
 						else
                         {
-							rs = rsContainer = null;
+							rs = null;
+                            rsContainer = null;
 						}
                     }
 					
@@ -230,7 +233,7 @@ package Extensions.DarkEdif
                 {
 					throw new Error("Invalid property ID " + chkIDOrName + ", max ID is " + (numProps - 1) + ".");
 				}
-				return chkIDOrName;
+				return int(chkIDOrName);
 			}
             var p:DarkEdifProperty = null;
             for each (var prop3:DarkEdifProperty in props)
@@ -266,13 +269,13 @@ package Extensions.DarkEdif
 				return null;
 			}
 			var prop:DarkEdifProperty = props[idx];
-            const textPropIDs:Vector.<int> = new <int>[
+            const textPropIDs:Vector.<int> = new Vector.<int>([
                 5,  // PROPTYPE_EDIT_STRING
                 22, // PROPTYPE_EDIT_MULTILINE
                 16, // PROPTYPE_FILENAME
                 19, // PROPTYPE_PICTUREFILENAME
-                26, // PROPTYPE_DIRECTORYNAME
-            ];
+                26 // PROPTYPE_DIRECTORYNAME
+            ]);
             if (textPropIDs.indexOf(prop.propTypeID) != -1 || IsComboBoxProp(prop.propTypeID))
             {
                 // Prop ver 2 added repeating prop sets
@@ -309,17 +312,17 @@ package Extensions.DarkEdif
 				return 0.0;
 			}
             var prop:DarkEdifProperty = props[idx];
-            const numPropIDsInteger:Vector.<int> = new <int>[
+            const numPropIDsInteger:Vector.<int> = new Vector.<int>([
 				6, // PROPTYPE_EDIT_NUMBER
 				9, // PROPTYPE_COLOR
 				11, // PROPTYPE_SLIDEREDIT
 				12, // PROPTYPE_SPINEDIT
 				13 // PROPTYPE_DIRCTRL
-            ];
-            const numPropIDsFloat:Vector.<int> = new <int>[
+            ]);
+            const numPropIDsFloat:Vector.<int> = new Vector.<int>([
 				21, // PROPTYPE_EDIT_FLOAT
 				27 // PROPTYPE_SPINEDITFLOAT
-            ];
+            ]);
 			if (numPropIDsInteger.indexOf(prop.propTypeID) != -1)
             {
                 prop.propData.position = 0;
